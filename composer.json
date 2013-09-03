@@ -1,0 +1,18 @@
+{
+    "name": "malukenho/phrases",
+    "description": "Components to use in this project",
+    "require": {
+        "phpunit/phpunit": "*@dev"
+    },
+    "authors": [
+        {
+            "name": "malukenho",
+            "email": "admin@phpse.net"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Phrases": "src"
+        }
+    }
+}
