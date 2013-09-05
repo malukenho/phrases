@@ -22,11 +22,6 @@ class Router
 		return $this;
 	}
 
-	public function action($action)
-	{
-		;
-	}
-
 	private function getCurrentURI()
 	{
 		return trim(

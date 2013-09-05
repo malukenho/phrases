@@ -5,7 +5,7 @@ class Server
 {
 	public function initiate()
 	{
-		$router = Registry::getService('router');
+		$router = new Services\Router;
 		$router->type($_SERVER['REQUEST_METHOD'])->get('a');
 	}
 }
