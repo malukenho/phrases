@@ -8,26 +8,26 @@ class Router
 
 	public function setURI($uri)
 	{
-		$this->uri = $uri . '/';
+		$this->uri = $uri;
 		return $this;
 	}
 
-	public function type($typeOfRequest)
+	public function httpMethodTypeRequested($typeOfRequest)
 	{
-		$this->typeOfRequest = (string) strtoupper($typeOfRequest);
+		$this->typeOfRequest = strtoupper($typeOfRequest);
 
-		$types = array('GET', 'PUT', 'POST');
+		$availableTypes = array('GET', 'PUT', 'POST');
 
-		if(! in_array($this->typeOfRequest, $types))
+		if(! in_array($this->typeOfRequest, $availableTypes))
 			$this->typeOfRequest = 'GET';
 
 		return $this;
 	}
 
-	private function takePhraseRequired()
+	public function takePhraseRequired()
 	{
-		$pattern = "#quote/(.[^/]+)#";
-		preg_match($pattern, $this->uri, $matches);
+		$getStandardSlugRequired = "#quote/(.[^/]+)#";
+		preg_match($getStandardSlugRequired, $this->uri, $matches);
 
 		if(isset($matches[1]))
 			return $matches[1];
@@ -35,8 +35,4 @@ class Router
 		return FALSE;
 	}
 
-	public function getPhraseSlug()
-	{
-		return $this->takePhraseRequired();
-	}
 }
