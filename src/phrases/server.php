@@ -6,7 +6,7 @@ class Server
     public function initiate()
     {
         $router = new Services\Router;
-        $router->type($_SERVER['REQUEST_METHOD'])
+        $router->httpMethodTypeRequested($_SERVER['REQUEST_METHOD'])
                ->setUri($_SERVER['REQUEST_URI']);
     }
 }
