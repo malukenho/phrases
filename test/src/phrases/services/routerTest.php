@@ -3,41 +3,37 @@ namespace Phrases\Services;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
-    public function testRouterClassCanReturnSlugRequiredCorrectly()
+
+    public function provider() 
+    {
+        return array(
+            array('phrases/quote', 'false'),
+            array('phrases/quote/random', 'random'),
+            array('phrases/quote/random/', 'random'),
+            array('phrases/quote/hello-word', 'hello-word'),
+            array('phrases/quote/uri-required/this-value-not-is-valid', 'uri-required')
+        );
+    }
+
+    /**
+     * @dataProvider provider
+     */
+    public function testRouterClassCanReturnSlugRequiredCorrectly($url, $expected)
     {
         $router =   new Router;
 
-        $slug   =   $router->setURI('phrases/quote')
-                           ->getPhraseSlug();
-        
-        $this->assertFalse($slug);
-        
-        $slug   =   $router->setURI('phrases/quote/random')
-                           ->getPhraseSlug();
-        
-        $this->assertEquals('random', $slug);
+        $slug   =   $router->setURI($url)
+                           ->takePhraseRequired();
 
-        $slug   =   $router->setURI('phrases/quote/random/')
-                           ->getPhraseSlug();
-        
-        $this->assertEquals('random', $slug);
+        if ($expected === 'false') 
+        {
+            $this->assertFalse($slug);
+            return 1;
+        }
 
-        $slug   =   $router->setURI('phrases/quote/hello-word')
-                           ->getPhraseSlug();
+        $this->assertEquals($slug, $expected);
         
-        $this->assertEquals('hello-word', $slug);
-
-        $slug   =   $router->setURI('phrases/quote/uri-required/this-value-not-is-valid')
-                           ->getPhraseSlug();
-        
-        $this->assertEquals('uri-required', $slug);
-
-        unset($router);
 
     }
 
-    public function testRouterClassCanInstanciateMethodOfRequestCorrectly()
-    {
-
-    }
 }

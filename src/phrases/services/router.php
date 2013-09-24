@@ -18,8 +18,9 @@ class Router
 
 		$availableTypes = array('GET', 'PUT', 'POST');
 
-		if(! in_array($this->typeOfRequest, $availableTypes))
-			$this->typeOfRequest = 'GET';
+		if (! in_array($this->typeOfRequest, $availableTypes)) {
+			new \Phrases\HTTP\Response(405, "Method not allowed");
+		}
 
 		return $this;
 	}

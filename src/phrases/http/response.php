@@ -1,7 +1,7 @@
 <?php
-namespace Phrases;
+namespace Phrases\HTTP;
 
-class BadRequest
+class Response
 {
     public function __construct($statusCode, $message)
     {
