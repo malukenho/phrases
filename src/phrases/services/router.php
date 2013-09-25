@@ -1,6 +1,9 @@
 <?php
 namespace Phrases\Services;
 
+use Phrases\HTTP;
+use Phrases\Enum;
+
 class Router
 {
 	private $typeOfRequest;
@@ -16,10 +19,10 @@ class Router
 	{
 		$this->typeOfRequest = strtoupper($typeOfRequest);
 
-		$availableTypes = array('GET', 'PUT', 'POST');
+		$methodsAllowed = new Enum\Validation(new HTTP\AllowedTypesRequested);
 
-		if (! in_array($this->typeOfRequest, $availableTypes)) {
-			new \Phrases\HTTP\Response(405, "Method not allowed");
+		if (! $methodsAllowed->hasValue($typeOfRequest)) {
+			new HTTP\Response(405, "Method not allowed");
 		}
 
 		return $this;

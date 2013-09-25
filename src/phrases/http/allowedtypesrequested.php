@@ -1,5 +1,5 @@
 <?php
-namespace Phrases\Services\HTTP;
+namespace Phrases\HTTP;
 
 class AllowedTypesRequested
 {
