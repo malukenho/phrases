@@ -25,6 +25,8 @@ class Router
 			new HTTP\Response(405, "Method not allowed");
 		}
 
+		$httpVerb = HTTP\Verbs\Factory::getMethod($typeOfRequest);
+
 		return $this;
 	}
 
@@ -36,7 +38,7 @@ class Router
 		if(isset($matches[1]))
 			return $matches[1];
 
-		return FALSE;
+		return false;
 	}
 
 }
