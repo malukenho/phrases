@@ -13,6 +13,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function setUP()
+    {
+        $rootPath = __FILE__;
+
+        for ($i=0; $i <= 5; $i++)
+            $rootPath = dirname($rootPath);
+
+        defined('BASE_DIR') or define('BASE_DIR', $rootPath);
+    }
+
     /**
      * @dataProvider methodsAllowed
      * @test
