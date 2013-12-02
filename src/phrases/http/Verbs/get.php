@@ -18,8 +18,7 @@ class GET
 
         $key = $this->xmlDocument->xpath("//quote[@slug='{$keyName}']");
 
-        if(! empty($key))
-        {
+        if (! empty($key)) {
             return true;
         }
 
