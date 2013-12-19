@@ -3,21 +3,29 @@ namespace Phrases\Services;
 
 use Phrases\HTTP;
 use Phrases\Enum;
+use Phrases\Reader;
 
 class Router
 {
-	private $typeOfRequest;
-	private $uri;
+	private $_typeOfRequest;
+	private $_uri;
+	private $_fileToConsult;
 
 	public function setURI($uri)
 	{
-		$this->uri = $uri;
+		$this->_uri = $uri;
+		return $this;
+	}
+
+	public function fileToConsult($fileName)
+	{
+		$this->_fileToConsult = $fileName;
 		return $this;
 	}
 
 	public function httpMethodTypeRequested($typeOfRequest)
 	{
-		$this->typeOfRequest = strtoupper($typeOfRequest);
+		$this->_typeOfRequest = strtoupper($typeOfRequest);
 
 		$methodsAllowed = new Enum\Validation(new HTTP\AllowedTypesRequested);
 
@@ -27,18 +35,27 @@ class Router
 
 		$httpVerb = HTTP\Verbs\Factory::getMethod($typeOfRequest);
 
-		return $this;
+		return $this->_response($httpVerb);
 	}
 
-	public function takePhraseRequired()
+	private function _response($httpVerb)
 	{
-		$getStandardSlugRequired = "#quote/(.[^/]+)#";
-		preg_match($getStandardSlugRequired, $this->uri, $matches);
-
-		if(isset($matches[1]))
-			return $matches[1];
-
-		return false;
+		$reader = new Reader\Xml($this->_fileToConsult);
+		
+		return $reader->asXML(
+			$this->takePhraseRequired()
+		);
 	}
+
+    public function takePhraseRequired()
+    {
+        $getStandardSlugRequired = "#quote/(.[^/]+)#";
+        preg_match($getStandardSlugRequired, $this->_uri, $matches);
+
+        if(isset($matches[1]))
+                return $matches[1];
+
+        return false;
+    }
 
 }

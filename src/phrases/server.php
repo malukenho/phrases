@@ -3,10 +3,11 @@ namespace Phrases;
 
 class Server
 {
-    public function initiate()
+    public function initiate($fileToConsult)
     {
         $router = new Services\Router;
-        $router->httpMethodTypeRequested($_SERVER['REQUEST_METHOD'])
-               ->setUri($_SERVER['REQUEST_URI']);
+        return $router->setUri($_SERVER['REQUEST_URI'])
+        	->fileToConsult($fileToConsult)
+        	->httpMethodTypeRequested($_SERVER['REQUEST_METHOD']);
     }
 }

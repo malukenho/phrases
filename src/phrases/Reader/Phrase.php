@@ -1,5 +1,5 @@
 <?php
-namespace Phrase\Reader;
+namespace Phrases\Reader;
 
 class Phrase
 {
