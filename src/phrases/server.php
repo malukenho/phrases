@@ -8,6 +8,6 @@ class Server
         $router = new Services\Router;
         return $router->setUri($_SERVER['REQUEST_URI'])
         	->fileToConsult($fileToConsult)
-        	->httpMethodTypeRequested($_SERVER['REQUEST_METHOD']);
+        	->httpVerb($_SERVER['REQUEST_METHOD']);
     }
 }
