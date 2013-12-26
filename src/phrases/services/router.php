@@ -10,6 +10,7 @@ class Router
 	private $_typeOfRequest;
 	private $_uri;
 	private $_fileToConsult;
+    private $_uriMatch;
 
 	public function setURI($uri)
 	{
@@ -23,6 +24,14 @@ class Router
 		return $this;
 	}
 
+    public function uri($uriMatch)
+    {
+        $uriMatch = trim($uriMatch, '/');
+        $uriMatch = str_replace('*', '(.[^/]+)', $uriMatch);
+        $this->_uriMatch = "#{$uriMatch}#";
+        return $this;
+    }
+
 	public function httpMethodTypeRequested($typeOfRequest)
 	{
 		$this->_typeOfRequest = strtoupper($typeOfRequest);
@@ -35,13 +44,18 @@ class Router
 
 		$httpVerb = HTTP\Verbs\Factory::getMethod($typeOfRequest);
 
-		return $this->_response($httpVerb);
+		return $this;
 	}
+
+    public function dispatch()
+    {
+        return $this->_response($this->_typeOfRequest);
+    }
 
 	private function _response($httpVerb)
 	{
 		$reader = new Reader\Xml($this->_fileToConsult);
-		
+
 		return $reader->asXML(
 			$this->takePhraseRequired()
 		);
@@ -49,8 +63,7 @@ class Router
 
     public function takePhraseRequired()
     {
-        $getStandardSlugRequired = "#quote/(.[^/]+)#";
-        preg_match($getStandardSlugRequired, $this->_uri, $matches);
+        preg_match($this->_uriMatch, $this->_uri, $matches);
 
         if(isset($matches[1]))
                 return $matches[1];
