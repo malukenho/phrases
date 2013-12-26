@@ -32,7 +32,7 @@ class Router
         return $this;
     }
 
-	public function httpMethodTypeRequested($typeOfRequest)
+	public function httpVerb($typeOfRequest)
 	{
 		$this->_typeOfRequest = strtoupper($typeOfRequest);
 

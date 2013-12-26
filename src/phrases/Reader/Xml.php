@@ -16,14 +16,14 @@ class Xml
 
     public function asXML($key)
     {
-        Http\Response::contentType('text/xml');
-
         if ($this->_hasKey($key))
         {
+            Http\Response::contentType('text/xml');
             return $this->_fetchXML($key);
         }
 
-        return false;
+        new  Http\Response(404, 'Not Found');
+        return $this->_throwError('Not Found');
     }
 
     private function _hasKey($keyName)
@@ -47,4 +47,11 @@ class Xml
         return $xmlDoc->asXML();
     }
 
+    public function _throwError($string)
+    {
+        $xmlDoc = new \SimpleXMLElement('<phrases></phrases>');
+        $xmlDoc->error = $string;
+
+        return $xmlDoc->asXML();
+    }
 }

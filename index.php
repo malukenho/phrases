@@ -12,5 +12,5 @@ require __DIR__.'/vendor/autoload.php';
 $phrasesServer = new Phrases\Server();
 
 echo $phrasesServer->initiate('phrases.xml')
-    ->uri('/joker/*')
+    ->uri('/quote/*')
     ->dispatch();
