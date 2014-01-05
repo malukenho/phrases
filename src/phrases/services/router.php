@@ -11,6 +11,7 @@ class Router
 	private $_uri;
 	private $_fileToConsult;
     private $_uriMatch;
+    private $_httpVerb;
 
 	public function setURI($uri)
 	{
@@ -42,7 +43,7 @@ class Router
 			new HTTP\Response(405, "Method not allowed");
 		}
 
-		$httpVerb = HTTP\Verbs\Factory::getMethod($typeOfRequest);
+		$this->_httpVerb = HTTP\Verbs\Factory::getMethod($typeOfRequest);
 
 		return $this;
 	}
@@ -56,6 +57,10 @@ class Router
 	{
 		$reader = new Reader\Xml($this->_fileToConsult);
 
+		if (! $this->_httpVerb->action($this->_fileToConsult)) {
+			return false;
+		}
+
 		return $reader->asXML(
 			$this->takePhraseRequired()
 		);
@@ -65,8 +70,8 @@ class Router
     {
         preg_match($this->_uriMatch, $this->_uri, $matches);
 
-        if(isset($matches[1]))
-                return $matches[1];
+        if (isset($matches[1]))
+            return $matches[1];
 
         return false;
     }
