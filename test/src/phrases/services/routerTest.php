@@ -24,12 +24,12 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $reflection = new \ReflectionClass(get_class($router));
 
-        $this->assertTrue($reflection->hasProperty('uri'), 
+        $this->assertTrue($reflection->hasProperty('_uri'), 
             'Class has not a property called "uri"');
 
         $router->setURI($url);
 
-        $uriProperty = $reflection->getProperty('uri');
+        $uriProperty = $reflection->getProperty('_uri');
         $uriProperty->setAccessible(true);
 
         $this->assertEquals($uriProperty->getValue($router), $url, 'Ooops! The value is not correctly storaged in uri property on class ' . get_class($router));

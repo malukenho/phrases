@@ -1,13 +1,19 @@
 <?php
 namespace Phrases;
 
+use Phrases\Services\Router;
+
 class Server
 {
-    public function initiate($fileToConsult)
-    {
-        $router = new Services\Router;
-        return $router->setUri($_SERVER['REQUEST_URI'])
-        	->fileToConsult($fileToConsult)
-        	->httpVerb($_SERVER['REQUEST_METHOD']);
-    }
+	private $_router;
+
+	public function __construct(Router $router)
+	{
+		$this->_router = $router;
+	}
+
+	public function dispatch()
+	{
+		return $this->_router->delegateRequest();
+	}
 }

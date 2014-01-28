@@ -9,8 +9,11 @@ date_default_timezone_set('America/Sao_Paulo');
 
 require __DIR__.'/vendor/autoload.php';
 
-$phrasesServer = new Phrases\Server();
+$router = new Phrases\Services\Router(
+	array(
+		'quote/(.+)' => 'Quote'
+	)
+);
 
-echo $phrasesServer->initiate('phrases.xml')
-    ->uri('/quote/*')
-    ->dispatch();
+$phrasesServer = new Phrases\Server($router);
+echo $phrasesServer->dispatch();

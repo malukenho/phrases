@@ -1,79 +1,77 @@
 <?php
 namespace Phrases\Services;
 
-use Phrases\HTTP;
-use Phrases\Enum;
-use Phrases\Reader;
-
 class Router
 {
-	private $_typeOfRequest;
-	private $_uri;
-	private $_fileToConsult;
-    private $_uriMatch;
-    private $_httpVerb;
+	private $_routerCollection = array();
+	private $_routerClass;
 
-	public function setURI($uri)
+	public function __construct(array $urlRouters)
 	{
-		$this->_uri = $uri;
-		return $this;
+		$this->_routerCollection = $urlRouters;
+		$this->_matchRequest();
 	}
 
-	public function fileToConsult($fileName)
+	private function _matchRequest()
 	{
-		$this->_fileToConsult = $fileName;
-		return $this;
-	}
+		ksort($this->_routerCollection);
 
-    public function uri($uriMatch)
-    {
-        $uriMatch = trim($uriMatch, '/');
-        $uriMatch = str_replace('*', '(.[^/]+)', $uriMatch);
-        $this->_uriMatch = "#{$uriMatch}#";
-        return $this;
-    }
+		foreach ($this->_routerCollection as $regex => $className) {
+			$regex = str_replace('/', '\/', $regex);
+			$regex = '/'. $regex . '/';
 
-	public function httpVerb($typeOfRequest)
-	{
-		$this->_typeOfRequest = strtoupper($typeOfRequest);
-
-		$methodsAllowed = new Enum\Validation(new HTTP\AllowedTypesRequested);
-
-		if (! $methodsAllowed->hasValue($typeOfRequest)) {
-			new HTTP\Response(405, "Method not allowed");
+			if ($this->_match($regex, $className)) {
+				break 1;
+			}
 		}
-
-		$this->_httpVerb = HTTP\Verbs\Factory::getMethod($typeOfRequest);
-
-		return $this;
 	}
 
-    public function dispatch()
-    {
-        return $this->_response($this->_typeOfRequest);
-    }
-
-	private function _response($httpVerb)
+	private function _match($regex, $className)
 	{
-		$reader = new Reader\Xml($this->_fileToConsult);
+		preg_match($regex, $this->_getPath(), $matches);
 
-		if (! $this->_httpVerb->action($this->_fileToConsult)) {
+		if (! $matches) {
+			return false;
+		}
+		
+		$className = __NAMESPACE__.'\\Response\\'.$className;
+
+		if (! class_exists($className)) {
+			throw new Exception('Class '.$className. ' not found!');
 			return false;
 		}
 
-		return $reader->asXML(
-			$this->takePhraseRequired()
-		);
+		$routerClass = new $className;
+
+		if (! method_exists($routerClass, $this->_getHttpContext())) {
+			throw new BadMethodCallException('Method '.$this->_getHttpContext() .', no suported!');
+			return false;
+		}
+
+		$this->_routerClass = $routerClass;
+		return true;
 	}
 
-    public function takePhraseRequired()
-    {
-        preg_match($this->_uriMatch, $this->_uri, $matches);
 
-        if (isset($matches[1]))
-            return $matches[1];
+	private function _getHost()
+	{
+		return $_SERVER['HTTP_HOST'];
+	}
 
-        return false;
-    }
+	private function _getPath()
+	{
+		return $_SERVER['REQUEST_URI'];
+	}
 
+	private function _getHttpContext()
+	{
+		return $_SERVER['REQUEST_METHOD'];
+	}
+
+	public function delegateRequest()
+	{
+		return call_user_func(
+			array($this->_routerClass, $this->_getHttpContext())
+		);
+	}
 }
