@@ -1,10 +1,8 @@
 <?xml version="1.0" ?>
-<phpunit colors="true" bootstrap="vendor/autoload.php">
+<phpunit colors="true" verbose="true" bootstrap="vendor/autoload.php">
 	<testsuites>
-		<testsuite named="TestServer">
-				<directory>test/</directory>
-				<directory>test/src</directory>
-				<directory>test/src/services</directory>
+		<testsuite name="TestServer">
+				<directory>test/*</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>

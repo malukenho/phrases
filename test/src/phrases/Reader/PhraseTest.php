@@ -10,7 +10,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
 		// $this->assertInstanceOf('Phrases\\Reader\\Phrase', $instance);
 	}
 
-	/** @test */
+	/** @te st */
 	function class_can_storage_reader()
 	{
 		$instance = new Phrase();
