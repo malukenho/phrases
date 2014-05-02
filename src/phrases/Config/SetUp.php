@@ -1,7 +1,6 @@
 <?php
 namespace Phrases\Config;
 
-use Phrases\Reader;
 use Phrases\Reader\AbstractReaderConfig;
 
 /**
@@ -24,7 +23,7 @@ class SetUp
     }
 
     /**
-     * @return array
+     * @return AbstractReaderConfig
      */
     public function getReaderConfig()
     {

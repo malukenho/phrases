@@ -2,7 +2,6 @@
 namespace Phrases\Router;
 
 use Phrases\Router\Collection;
-use Phrases\http\Request;
 use RuntimeException;
 
 class Matcher

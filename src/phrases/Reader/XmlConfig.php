@@ -8,6 +8,9 @@ class XmlConfig extends AbstractReaderConfig
 {
     private $documentContent;
 
+    /**
+     * @param SimpleXMLElement $content
+     */
     public function __construct($content)
     {
         $this->documentContent = $content;
