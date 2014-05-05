@@ -2,8 +2,8 @@
 namespace Phrases;
 
 use Phrases\Application\Config\SetUp;
-use Phrases\Http\Router\Collection;
-use Phrases\Http\Router\Matcher;
+use Phrases\Http;
+use Phrases\Reader;
 
 class Application
 {
@@ -13,40 +13,34 @@ class Application
     private $routerCollection;
 
     /**
-     * @var Config\SetUp
+     * @var Reader\IReader
      */
     private $settings;
 
     /**
-     * Proxy pattern
+     * @var Http\Router\Matcher
      */
-    private $matchInstance = null;
+    private $match;
 
     /**
-     * @param Collection $collection of routers
-     * @param SetUp      $settings   for application
+     * @param Http\Router\Collection $collection
+     * @param Reader\IReader $settings
+     * @param Http\Router\Matcher $matcher
      */
-    public function __construct(Collection $collection, SetUp $settings)
+    public function __construct(Http\Router\Collection $collection, Reader\IReader $settings, Http\Router\Matcher $matcher)
     {
         $this->routerCollection = $collection;
         $this->settings = $settings;
+        $this->match = $matcher;
     }
 
     /**
-     * Run task with settings
-     *
-     * @return string
+     * @return mixed
      */
     public function run()
     {
-        if (null === $this->matchInstance) {
-            $this->matchInstance = new Matcher($this->routerCollection);
-        }
-
-        $entity = $this->matchInstance->routers();
-        $reader = $this->settings->getReaderConfig();
-
-        return $reader->findBy($entity);
+        $entity = $this->match->matchCurrentRequest($this->routerCollection);
+        return $this->settings->findBy($entity);
     }
 
 } 

@@ -1,23 +1,21 @@
 <?php
 namespace Phrases\Http\Router;
 
-use Phrases\Http\Router\Collection;
-use Phrases\Http\Request;
+use Phrases\Http;
 use RuntimeException;
 
+/**
+ * Class Matcher
+ *
+ * @package Phrases\Http\Router
+ */
 class Matcher
 {
-    private $collection;
 
-    public function __construct(Collection $collection)
+    public function matchCurrentRequest(Http\Router\Collection $collection)
     {
-        $this->collection = $collection;
-    }
-
-    public function routers()
-    {
-        foreach ($this->collection->all() as $router) {
-            if (preg_match('#'.$router->getUri().'#', $_SERVER['REQUEST_URI'], $match)) {
+        foreach ($collection->all() as $router) {
+            if (preg_match('#'.$router->getRoute().'#', $_SERVER['REQUEST_URI'], $match)) {
                 return $match[1];
             }
         }

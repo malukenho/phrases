@@ -2,20 +2,31 @@
 namespace Phrases\Http\Router;
 
 use Iterator;
-use Phrases\Http\Router\Create;
+use Phrases\Http;
 
 class Collection implements Iterator
 {
+    /**
+     * @var array
+     */
     private $_routes = array();
 
-    public function add($uri, Create $action)
+    /**
+     * @param Http\Router $route
+     */
+    public function append(Http\Router $route)
     {
-        $this->_routes[$uri] = $action;
+        $this->_routes[] = $route;
     }
 
-    public function remove($uri)
+
+    public function remove(Http\Router $uri)
     {
-        unset($this->_routes[$uri]);
+        foreach ($this->_routes as $identify => &$route) {
+            if ($uri === $route) {
+                unset($this->_routes[$identify]);
+            }
+        }
     }
 
     public function get($uri)

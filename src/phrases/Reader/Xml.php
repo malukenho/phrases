@@ -1,21 +1,26 @@
 <?php
 namespace Phrases\Reader;
 
-use \Phrases\Reader\XmlConfig;
+use Phrases\Reader;
+use Phrases\Http;
 
-class Xml
+class Xml implements Reader\IReader
 {
-    private $xmlDocument;
+    private $documentContent;
 
-    public function __construct($fileName)
+    public function __construct($content)
     {
-        $this->xmlDocument = simplexml_load_file(
-            BASE_DIR.'/'.$fileName
-        );
+        $this->documentContent = $content;
     }
 
-    public function getConfig()
+    public function findBy($entity)
     {
-        return new XmlConfig($this->xmlDocument);
+        $key = $this->documentContent->xpath("//quote[@slug='{$entity}']");
+
+        $xmlDoc = new \SimpleXMLElement('<phrases></phrases>');
+        $xmlDoc->quote[] = $key[0];
+
+        Http\Response::contentType('text/xml');
+        return $xmlDoc->asXML();
     }
 }
