@@ -8,10 +8,11 @@ date_default_timezone_set('America/Sao_Paulo');
 require __DIR__.'/vendor/autoload.php';
 
 $reader = new Phrases\Reader\Xml('phrases.xml');
-$settings = new Phrases\Config\SetUp($reader->getConfig());
+$settings = new Phrases\Application\Config\SetUp($reader->getConfig());
 
-$routerCollection = new Phrases\Router\Collection();
-$routerCollection->add('phrases', new Phrases\Router\Create('/quote/(.+)', array(
+
+$routerCollection = new Phrases\Http\Router\Collection();
+$routerCollection->add('phrases', new Phrases\Http\Router\Create('/quote/(.+)', array(
     'methods' => 'GET'
 )));
 

@@ -1,5 +1,5 @@
 <?php
-namespace Phrases\Config;
+namespace Phrases\Application\Config;
 
 use Phrases\Reader;
 use Phrases\Reader\AbstractReaderConfig;

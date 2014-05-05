@@ -1,14 +1,14 @@
 <?php
 namespace Phrases;
 
-use Phrases\Config\SetUp;
-use Phrases\Router\Collection;
-use Phrases\Router\Matcher;
+use Phrases\Application\Config\SetUp;
+use Phrases\Http\Router\Collection;
+use Phrases\Http\Router\Matcher;
 
 class Application
 {
     /**
-     * @var Router\Collection
+     * @var Http\Router\Collection
      */
     private $routerCollection;
 

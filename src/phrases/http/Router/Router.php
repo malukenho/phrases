@@ -1,7 +1,7 @@
 <?php
-namespace Phrases\Router;
+namespace Phrases\Router\Http;
 
-use Phrases\Router\Collection;
+use Phrases\Router\Http\Collection;
 
 class Router
 {

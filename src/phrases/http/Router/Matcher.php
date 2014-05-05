@@ -1,8 +1,8 @@
 <?php
-namespace Phrases\Router;
+namespace Phrases\Http\Router;
 
-use Phrases\Router\Collection;
-use Phrases\http\Request;
+use Phrases\Http\Router\Collection;
+use Phrases\Http\Request;
 use RuntimeException;
 
 class Matcher

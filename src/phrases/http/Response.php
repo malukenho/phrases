@@ -1,5 +1,5 @@
 <?php
-namespace Phrases\http;
+namespace Phrases\Http;
 
 
 class Response

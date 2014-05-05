@@ -1,5 +1,5 @@
 <?php
-namespace Phrases\Router;
+namespace Phrases\Http\Router;
 
 class Create
 {

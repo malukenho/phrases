@@ -1,8 +1,8 @@
 <?php
-namespace Phrases\Router;
+namespace Phrases\Http\Router;
 
 use Iterator;
-use Phrases\Router\Create;
+use Phrases\Http\Router\Create;
 
 class Collection implements Iterator
 {
