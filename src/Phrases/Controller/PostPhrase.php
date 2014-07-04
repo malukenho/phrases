@@ -6,31 +6,31 @@ use Zend\Http\Request;
 
 class PostPhrase implements ExecutionInterface
 {
-	private $data;
+    private $data;
 
-	public function __construct(array $postData)
-	{
-		$this->data = $postData;
-	}
+    public function __construct(array $postData)
+    {
+        $this->data = $postData;
+    }
 
-	protected function isValidPostData()
-	{
-		$mandatoryKeys = [
-			'title',
-			'text'
-		];
+    protected function isValidPostData()
+    {
+        $mandatoryKeys = [
+            'title',
+            'text'
+        ];
 
-		return !array_diff($mandatoryKeys, array_keys($this->data));
-	}
+        return !array_diff($mandatoryKeys, array_keys($this->data));
+    }
 
-	public function execute(Request $request)
-	{
-		$response = new Response();
+    public function execute(Request $request)
+    {
+        $response = new Response();
 
-		if ($this->isValidPostData()) {
-			return $response->setStatusCode(Response::STATUS_CODE_201);
-		}
+        if ($this->isValidPostData()) {
+            return $response->setStatusCode(Response::STATUS_CODE_201);
+        }
 
-		return $response->setStatusCode(Response::STATUS_CODE_400);
-	}
+        return $response->setStatusCode(Response::STATUS_CODE_400);
+    }
 }
