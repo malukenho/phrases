@@ -13,7 +13,7 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
         $phrases = new Memory($list);
 
         $this->assertInstanceOf(
-            'Phrases\Persistance\RepositoryInterface',
+            Phrases\Persistance\RepositoryInterface::class,
             $phrases
         );
         $this->assertEquals(
