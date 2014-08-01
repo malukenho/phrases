@@ -13,7 +13,7 @@ $settings = $readerFactory->createXmlConfigurationForFileName('phrases.xml');
 $routePhrases = new Phrases\Http\Router('GET', '/quote/(.+)');
 
 $routerCollection = new Phrases\Http\Router\Collection();
-$routerCollection->append($routePhrases);
+$routerCollection->attach($routePhrases);
 
 $matcher = new Phrases\Http\Router\Matcher;
 

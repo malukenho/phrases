@@ -1,69 +1,54 @@
 <?php
 namespace Phrases\Http\Router;
 
-use Iterator;
+use SplObjectStorage;
 use Phrases\Http;
+use InvalidArgumentException;
 
-class Collection implements Iterator
+class Collection extends SplObjectStorage
 {
     /**
-     * @var array
+     * @param Http\Router $route
+     * @param null $inf
+     * @throws \InvalidArgumentException
      */
-    private $_routes = array();
+    public function attach($route, $inf = null)
+    {
+        if (! $route instanceof Http\Router) {
+            throw new InvalidArgumentException(
+                sprintf('Expect a Phrases\Http\Router instance, %s given.', get_class($route))
+            );
+        }
+
+        parent::attach($route, $inf);
+    }
 
     /**
      * @param Http\Router $route
+     * @throws \InvalidArgumentException
      */
-    public function append(Http\Router $route)
+    public function detach($route)
     {
-        $this->_routes[] = $route;
-    }
-
-
-    public function remove(Http\Router $uri)
-    {
-        foreach ($this->_routes as $identify => &$route) {
-            if ($uri === $route) {
-                unset($this->_routes[$identify]);
-            }
+        if (! $route instanceof Http\Router) {
+            throw new InvalidArgumentException(
+                sprintf('Expect a Phrases\Http\Router instance, %s given.', get_class($route))
+            );
         }
+
+        parent::detach($route);
     }
 
-    public function get($uri)
-    {
-        return $this->_routes[$uri];
-    }
-
-    public function current()
-    {
-        return current($this->_routes);
-    }
-
-    public function next()
-    {
-        next($this->_routes);
-    }
-
+    /**
+     * Retrieve all routers stored on current collection
+     *
+     * @return array
+     */
     public function all()
     {
-        return $this->_routes;
-    }
-
-    public function key()
-    {
-        return key($this->_routes);
-    }
-
-    public function valid()
-    {
-        if ($this->_routes) {
-            return true;
+        $routers = array();
+        foreach ($this as $route) {
+            $routers[] = $route;
         }
-        return false;
-    }
-
-    public function rewind()
-    {
-        reset($this->_routes);
+        return $routers;
     }
 }

@@ -11,7 +11,11 @@ use RuntimeException;
  */
 class Matcher
 {
-
+    /**
+     * @param Collection $collection
+     * @return mixed
+     * @throws \RuntimeException
+     */
     public function matchCurrentRequest(Http\Router\Collection $collection)
     {
         foreach ($collection->all() as $router) {

@@ -3,6 +3,10 @@ namespace Phrases\Reader\Configuration;
 
 use Phrases\Reader;
 
+/**
+ * Class Factory
+ * @package Phrases\Reader\Configuration
+ */
 class Factory
 {
     /**

@@ -1,7 +1,6 @@
 <?php
 namespace Phrases;
 
-use Phrases\Application\Config\SetUp;
 use Phrases\Http;
 use Phrases\Reader;
 
