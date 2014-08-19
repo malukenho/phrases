@@ -1,24 +1,24 @@
 <?php
-namespace Phrases\Config;
+namespace Phrases\Application\Config;
 
 use Phrases\Reader;
-use Phrases\Reader\AbstractReaderConfig;
 
 /**
  * Class SetUp
- *
- * This is a value object
  *
  * @package Phrases\Config
  */
 class SetUp
 {
     /**
-     * @var AbstractReaderConfig
+     * @var Reader\AbstractReaderConfig
      */
     private $_readerConfig;
 
-    public function __construct(AbstractReaderConfig $reader)
+    /**
+     * @param Reader\AbstractReaderConfig $reader
+     */
+    public function __construct(Reader\AbstractReaderConfig $reader)
     {
         $this->_readerConfig = $reader;
     }

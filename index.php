@@ -7,13 +7,15 @@ date_default_timezone_set('America/Sao_Paulo');
 
 require __DIR__.'/vendor/autoload.php';
 
-$reader = new Phrases\Reader\Xml('phrases.xml');
-$settings = new Phrases\Config\SetUp($reader->getConfig());
+$readerFactory = new Phrases\Reader\Configuration\Factory;
+$settings = $readerFactory->createXmlConfigurationForFileName('phrases.xml');
 
-$routerCollection = new Phrases\Router\Collection();
-$routerCollection->add('phrases', new Phrases\Router\Create('/quote/(.+)', array(
-    'methods' => 'GET'
-)));
+$routePhrases = new Phrases\Http\Router('GET', '/quote/(.+)');
 
-$app = new Phrases\Application($routerCollection, $settings);
+$routerCollection = new Phrases\Http\Router\Collection();
+$routerCollection->attach($routePhrases);
+
+$matcher = new Phrases\Http\Router\Matcher;
+
+$app = new Phrases\Application($routerCollection, $settings, $matcher);
 echo $app->run();

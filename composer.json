@@ -2,6 +2,9 @@
     "name": "malukenho/phrases",
     "description": "Components to use in this project",
     "require": {
+        "php": ">=5.5"
+    },
+    "require-dev": {
         "phpunit/phpunit": "*@dev"
     },
     "authors": [
