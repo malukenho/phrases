@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<phpunit colors="true" verbose="true" bootstrap="vendor/autoload.php">
-	<testsuites>
-		<testsuite name="TestServer">
-				<directory>test/*</directory>
-		</testsuite>
-	</testsuites>
-</phpunit>
