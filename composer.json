@@ -1,0 +1,14 @@
+{
+    "require":  {
+        "php": ">=5.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*@DEV"
+    },
+    "autoload": {
+        "psr-0": {
+            "Phrases\\": "src/",
+            "PhrasesTest\\": "tests/src/"
+        }
+    }
+}
