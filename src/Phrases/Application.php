@@ -14,4 +14,14 @@ class Application
     {
         return $this->phrases;
     }
+
+    public function getOnePhrase()
+    {
+    	return $this->phrases[0];
+    }
+
+    public function run()
+    {
+    	echo $this->getOnePhrase();
+    }
 }
