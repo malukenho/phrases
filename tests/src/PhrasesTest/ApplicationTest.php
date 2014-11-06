@@ -24,4 +24,20 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(ConsumedData::asArray(), $this->application->getPhrases());
     }
+
+    public function testIfClassReturnOnePhrase()
+    {
+        $phrase = $this->application->getOnePhrase();
+        $consumedData = ConsumedData::asArray();
+
+        $this->assertEquals($consumedData[0], $phrase);
+    }
+
+    public function testIfApplicationWasRun()
+    {
+        $consumedData = ConsumedData::asArray();
+        
+        $this->expectOutputString($consumedData[0]);
+        $this->application->run();
+    }
 }
