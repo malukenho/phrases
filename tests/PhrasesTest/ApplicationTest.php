@@ -1,9 +1,9 @@
 <?php
 namespace PhrasesTest;
 
-use PHPUnit_Framework_TestCase;
 use Phrases\Application;
-use PhrasesTest\testProvideAsserts\ConsumedData;
+use PHPUnit_Framework_TestCase;
+use PhrasesTestAsset\ConsumedData;
 
 class ApplicationTest extends PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhrasesTest\testProvideAsserts;
+namespace PhrasesTestAsset;
 
 class ConsumedData
 {
