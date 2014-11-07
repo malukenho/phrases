@@ -14,30 +14,21 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $this->application = new Application(ConsumedData::asArray());
     }
 
-    public function testIfClassCanBeInstantiated()
+    public function testApplicationCanBeInstantiated()
     {
-        $app = new Application([]);
-        $this->assertInstanceOf('Phrases\\Application', $app);
+        $this->assertInstanceOf('Phrases\\Application', $this->application);
     }
 
-    public function testIfClassCanStorageThePhrases()
+    public function testApplicationCanStorageThePhrases()
     {
         $this->assertEquals(ConsumedData::asArray(), $this->application->getPhrases());
     }
 
-    public function testIfClassReturnOnePhrase()
+    public function testApplicationReturnOnePhrase()
     {
-        $phrase = $this->application->getOnePhrase();
+        $phrase = $this->application->getPhrase();
         $consumedData = ConsumedData::asArray();
 
         $this->assertEquals($consumedData[0], $phrase);
-    }
-
-    public function testIfApplicationWasRun()
-    {
-        $consumedData = ConsumedData::asArray();
-        
-        $this->expectOutputString($consumedData[0]);
-        $this->application->run();
     }
 }

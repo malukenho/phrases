@@ -1,6 +1,11 @@
 <?php
 namespace Phrases;
 
+use Phrases\Http\Response\Sender;
+use Zend\Stdlib\RequestInterface;
+use Zend\Http\PhpEnvironment\Request;
+use Phrases\Http\Response\CreateResponse;
+
 class Application
 {
     /**
@@ -9,13 +14,20 @@ class Application
     private $phrases;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * Constructor.
      *
-     * @param array $phrases
+     * @param array            $phrases
+     * @param RequestInterface $request {@see \Zend\Stdlib\RequestInterface}
      */
-    public function __construct(array $phrases)
+    public function __construct(array $phrases, RequestInterface $request = null)
     {
         $this->phrases = $phrases;
+        $this->request = is_null($request) ? new Request() : $request;
     }
 
     /**
@@ -33,9 +45,9 @@ class Application
      *
      * @return mixed
      */
-    public function getOnePhrase()
+    public function getPhrase()
     {
-    	return $this->phrases[0];
+    	return current($this->phrases);
     }
 
     /**
@@ -45,6 +57,14 @@ class Application
      */
     public function run()
     {
-    	echo $this->getOnePhrase();
+        $contentType = $this
+            ->request
+                ->getHeaders()
+                ->get('Accept');
+
+        $response = CreateResponse::to($contentType, $this->getPhrase());
+
+        $sender = new Sender();
+        $sender->send($response);
     }
 }
