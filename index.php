@@ -2,8 +2,7 @@
 
 use Phrases\Application;
 
-chdir(__DIR__);
+require __DIR__ . '/vendor/autoload.php';
 
-require 'vendor/autoload.php';
-
-$phrases = (new Application(['Jack Makiyama']))->run();
+$app = new Application(['Jack Makiyama']);
+$app->run();
