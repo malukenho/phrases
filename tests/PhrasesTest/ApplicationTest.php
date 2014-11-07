@@ -7,6 +7,9 @@ use PhrasesTestAsset\ConsumedData;
 
 class ApplicationTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Application
+     */
     private $application;
 
     public function setUp()

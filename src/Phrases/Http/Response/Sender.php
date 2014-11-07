@@ -16,7 +16,7 @@ class Sender
      *
      * @param Response $response
      *
-     * @return void|boolean
+     * @return string|boolean
      */
     public function send(Response $response)
     {
@@ -36,4 +36,4 @@ class Sender
 
         echo $response->getBody();
     }
-} 
+}

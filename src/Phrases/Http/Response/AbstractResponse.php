@@ -48,7 +48,7 @@ abstract class AbstractResponse
     /**
      * Try to call a successor if has been setted.
      *
-     * @return mixed
+     * @return void|mixed
      */
     private function callSuccessor()
     {
