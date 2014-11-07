@@ -7,8 +7,13 @@
     },
     "autoload": {
         "psr-0": {
-            "Phrases\\": "src/",
-            "PhrasesTest\\": "tests/src/"
+            "Phrases\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "PhrasesTest\\": "tests",
+            "PhrasesTestAsset\\": "tests"
         }
     }
 }
