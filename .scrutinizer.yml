@@ -7,7 +7,7 @@ filter:
         - 'library/*'
     paths: {  }
 tools:
-	external_code_coverage:
+    external_code_coverage:
         timeout: 600
         runs: 2
     php_sim:
