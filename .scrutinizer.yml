@@ -7,9 +7,6 @@ filter:
         - 'library/*'
     paths: {  }
 tools:
-    external_code_coverage:
-        timeout: 600
-        runs: 2
     php_sim:
         enabled: true
         min_mass: 16
