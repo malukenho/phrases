@@ -47,7 +47,7 @@ class Application
      */
     public function getPhrase()
     {
-    	return current($this->phrases);
+        return current($this->phrases);
     }
 
     /**
