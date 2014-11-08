@@ -16,7 +16,7 @@ class Sender
      *
      * @param Response $response
      *
-     * @return string|boolean
+     * @return false|null
      */
     public function send(Response $response)
     {

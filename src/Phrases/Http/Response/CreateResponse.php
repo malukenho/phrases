@@ -18,7 +18,7 @@ class CreateResponse
      * @param Accept $accept
      * @param String $phrase
      *
-     * @return Zend\Http\Response
+     * @return \Zend\Http\Response
      */
     public static function to(Accept $accept, $phrase)
     {

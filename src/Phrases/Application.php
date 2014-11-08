@@ -21,7 +21,7 @@ class Application
     /**
      * Constructor.
      *
-     * @param array            $phrases
+     * @param string[]         $phrases
      * @param RequestInterface $request {@see \Zend\Stdlib\RequestInterface}
      */
     public function __construct(array $phrases, RequestInterface $request = null)
@@ -33,7 +33,7 @@ class Application
     /**
      * Return all Phrase
      *
-     * @return array
+     * @return string[]
      */
     public function getPhrases()
     {
@@ -43,7 +43,7 @@ class Application
     /**
      * Return the single first phrase
      *
-     * @return mixed
+     * @return string
      */
     public function getPhrase()
     {
