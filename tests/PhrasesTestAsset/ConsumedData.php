@@ -11,6 +11,6 @@ class ConsumedData
 
     public static function asArray()
     {
-       return static::$data;
+        return static::$data;
     }
 }

@@ -81,7 +81,7 @@ abstract class AbstractResponse
     /**
      * Check if an object has a sucessor
      *
-     * @return mixed
+     * @return boolean
      */
     final public function hasSuccessor()
     {
