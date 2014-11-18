@@ -8,14 +8,14 @@
         "squizlabs/php_codesniffer": "~1.5.4"
     },
     "autoload": {
-        "psr-0": {
-            "Phrases\\": "src/"
+        "psr-4": {
+            "Phrases\\": "src/Phrases/"
         }
     },
     "autoload-dev": {
-        "psr-0": {
-            "PhrasesTest\\": "tests",
-            "PhrasesTestAsset\\": "tests"
+        "psr-4": {
+            "PhrasesTest\\": "tests/PhrasesTest",
+            "PhrasesTestAsset\\": "tests/PhrasesTestAsset"
         }
     }
 }
