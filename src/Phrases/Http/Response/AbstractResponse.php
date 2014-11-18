@@ -53,7 +53,7 @@ abstract class AbstractResponse
     private function callSuccessor()
     {
         if ($this->hasSuccessor()) {
-            return $this->objectSuccessor->tryResponseType();
+            return $this->objectSuccessor->handlerResponse();
         }
     }
 
@@ -94,7 +94,7 @@ abstract class AbstractResponse
      *
      * @return mixed
      */
-    public function tryResponseType()
+    public function handlerResponse()
     {
         if (! $this->isHandled && $this->canResolve()) {
             $this->markRequestAsHandled();

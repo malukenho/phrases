@@ -27,6 +27,6 @@ class CreateResponse
 
         $jsonResponse->setSuccessor($plainTextResponse);
 
-        return $jsonResponse->tryResponseType();
+        return $jsonResponse->handlerResponse();
     }
 }
