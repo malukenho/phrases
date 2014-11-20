@@ -13,7 +13,7 @@ use Zend\Http\Request;
 class FeatureContext implements Context, SnippetAcceptingContext
 {
     /**
-     * @var Phrases/Application
+     * @var Phrases\Application
      */
     private $application;
 
