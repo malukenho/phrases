@@ -53,18 +53,15 @@ class Application
     /**
      * Response to a Request
      *
-     * @return void
+     * @return \Zend\Http\Response
      */
-    public function run()
+    public function fetchResponse()
     {
         $contentType = $this
             ->request
                 ->getHeaders()
                 ->get('Accept');
 
-        $response = CreateResponse::to($contentType, $this->getPhrase());
-
-        $sender = new Sender();
-        $sender->send($response);
+        return CreateResponse::to($contentType, $this->getPhrase());
     }
 }
