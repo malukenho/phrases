@@ -1,7 +1,10 @@
 <?php
 use Phrases\Application;
+use Phrases\Http\Response\Send;
 
 require __DIR__ . '/vendor/autoload.php';
 
 $app = new Application(['Jack Makiyama']);
-$app->run();
+$response = $app->fetchResponse();
+
+Send::response($response);
