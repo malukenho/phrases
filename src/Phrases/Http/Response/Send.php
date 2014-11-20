@@ -9,7 +9,7 @@ use Zend\Http\Header\MultipleHeaderInterface;
  *
  * @author Jefersson Nathan <malukenho@phpse.net>
  */
-class Sender
+class Send
 {
     /**
      * Send headers and output to main output channel.
@@ -18,7 +18,7 @@ class Sender
      *
      * @return false|null
      */
-    public function send(Response $response)
+    public static function response(Response $response)
     {
         if (headers_sent()) {
             return false;
