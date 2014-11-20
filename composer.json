@@ -6,7 +6,7 @@
     "require-dev": {
         "phpunit/phpunit": "*@DEV",
         "squizlabs/php_codesniffer": "~1.5.4",
-        "behat/behat": "~3.0"
+        "behat/behat": "*@DEV"
     },
     "autoload": {
         "psr-4": {
