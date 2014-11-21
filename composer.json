@@ -1,0 +1,22 @@
+{
+    "require":  {
+        "php": ">=5.5",
+        "zendframework/zend-http": "2.0.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*@DEV",
+        "squizlabs/php_codesniffer": "~1.5.4",
+        "behat/behat": "*@DEV"
+    },
+    "autoload": {
+        "psr-4": {
+            "Phrases\\": "src/Phrases/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhrasesTest\\": "tests/PhrasesTest",
+            "PhrasesTestAsset\\": "tests/PhrasesTestAsset"
+        }
+    }
+}
