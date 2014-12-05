@@ -4,6 +4,8 @@ namespace Phrases;
 use Phrases\Http\Response\Sender;
 use Zend\Stdlib\RequestInterface;
 use Zend\Http\PhpEnvironment\Request;
+use Zend\Http\Headers;
+use Zend\Http\Response;
 use Phrases\Http\Response\CreateResponse;
 
 class Application
@@ -26,28 +28,8 @@ class Application
      */
     public function __construct(array $phrases, RequestInterface $request = null)
     {
-        $this->phrases = $phrases;
+        $this->phrases = new Controller\GetPhrase($phrases);
         $this->request = is_null($request) ? new Request() : $request;
-    }
-
-    /**
-     * Return all Phrase
-     *
-     * @return string[]
-     */
-    public function getPhrases()
-    {
-        return $this->phrases;
-    }
-
-    /**
-     * Return the single first phrase
-     *
-     * @return string
-     */
-    public function getPhrase()
-    {
-        return current($this->phrases);
     }
 
     /**
@@ -62,6 +44,23 @@ class Application
                 ->getHeaders()
                 ->get('Accept');
 
-        return CreateResponse::to($contentType, $this->getPhrase());
+        if (false === $contentType) {
+            $headers = Headers::fromString('Accept: application/json');
+            $contentType = $headers->get('Accept');
+        }
+
+        switch ($this->request->getMethod()) {
+            case 'GET':
+                return CreateResponse::to($contentType, $this->phrases->execute());
+                break;
+            default:
+                $message = sprintf('Method %s not expected', $this->request->getMethod());
+                $response = new Response();
+                $response->setStatusCode(Response::STATUS_CODE_405);
+                $response->setContent($message);
+
+                return $response;
+        }
+
     }
 }

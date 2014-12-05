@@ -4,6 +4,9 @@ namespace PhrasesTest;
 use Phrases\Application;
 use PHPUnit_Framework_TestCase;
 use PhrasesTestAsset\ConsumedData;
+use Zend\Http\Request;
+use Zend\Http\Headers;
+use Zend\StdLib\Parameters;
 
 class ApplicationTest extends PHPUnit_Framework_TestCase
 {
@@ -17,21 +20,43 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $this->application = new Application(ConsumedData::asArray());
     }
 
-    public function testApplicationCanStorageThePhrases()
+    public function testGetPhraseAsPlainText()
     {
-        $this->assertEquals(ConsumedData::asArray(), $this->application->getPhrases());
-    }
-
-    public function testApplicationReturnOnePhrase()
-    {
-        $phrase = $this->application->getPhrase();
-        $consumedData = ConsumedData::asArray();
-
-        $this->assertEquals($consumedData[0], $phrase);
+        $phrases = ConsumedData::asArray();
+        $request = new Request;
+        $header = new Headers;
+        $request->setMethod('GET');
+        $request->setUri('http://localhost/');
+        $request->setHeaders(Headers::fromString('Accept: plain/text'));
+        $app = new Application($phrases, $request);
+        $response = $app->fetchResponse();
+        $this->assertEquals(
+            200,
+            $response->getStatusCode()
+        );
+        $expectedPhrase = $phrases[0];
+        $this->assertEquals(
+            $expectedPhrase,
+            $response->getBody()
+        );
     }
 
     public function testPostNewPhrase()
     {
-        
+        $request = new Request;
+        $header = new Headers;
+        $parameters = new Parameters([
+            'title' => 'jajaja',
+            'text'  => 'hehe'
+        ]);
+        $request->setMethod('POST');
+        $request->setUri('http://localhost/');
+        $request->setPost($parameters);
+        $app = new Application(ConsumedData::asArray(), $request);
+        $response = $app->fetchResponse();
+        $this->assertEquals(
+            201,
+            $response->getStatusCode()
+        );
     }
 }
