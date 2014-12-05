@@ -1,14 +1,12 @@
 <?php
-
 namespace Phrases;
 
-use Phrases\Http\Response\Type;
-use Phrases\Persistence\RepositoryInterface;
+use Phrases\Http\Response\Sender;
 use Zend\Stdlib\RequestInterface;
-use Zend\Http\PhpEnvironment\Request as EnvRequest;
+use Zend\Http\PhpEnvironment\Request;
 use Zend\Http\Headers;
 use Zend\Http\Response;
-use Zend\Http\Request;
+use Phrases\Http\Response\CreateResponse;
 
 class Application
 {
@@ -25,13 +23,13 @@ class Application
     /**
      * Constructor.
      *
-     * @param RepositoryInterface      $phrases
-     * @param Request|RequestInterface $request {@see \Zend\Http\Request}
+     * @param string[]         $phrases
+     * @param RequestInterface $request {@see \Zend\Stdlib\RequestInterface}
      */
-    public function __construct(RepositoryInterface $phrases, Request $request = null)
+    public function __construct(array $phrases, RequestInterface $request = null)
     {
-        $this->phrases = $phrases;
-        $this->request = is_null($request) ? new EnvRequest() : $request;
+        $this->phrases = new Controller\GetPhrase($phrases);
+        $this->request = is_null($request) ? new Request() : $request;
     }
 
     /**
@@ -41,46 +39,28 @@ class Application
      */
     public function fetchResponse()
     {
-        $this->ensureAcceptHeaderExistsOnRequest($this->request);
-        $controllerFactory = new Controller\Factory($this->phrases);
-        $controller = $controllerFactory->forHttpMethod($this->request);
-        $response = $controller->execute($this->request);
+        $contentType = $this
+            ->request
+                ->getHeaders()
+                ->get('Accept');
 
-        return $this->serializeControllerResponse($this->request, $response);
-    }
-
-    /**
-     * @TODO: Extract method
-     *
-     * @param Request $request
-     * @param string  $defaultAccept
-     */
-    private function ensureAcceptHeaderExistsOnRequest(Request $request, $defaultAccept = 'plain/text')
-    {
-        $currentAccept = $request->getHeaders('Accept');
-        if (false === $currentAccept) {
-            $defaultAcceptHeaders = Headers::fromString('Accept: '.$defaultAccept);
-            $defaultAcceptHeader = $defaultAcceptHeaders->get('Accept');
-            $request->getHeaders()->addHeaders($defaultAcceptHeaders);
+        if (false === $contentType) {
+            $headers = Headers::fromString('Accept: application/json');
+            $contentType = $headers->get('Accept');
         }
-    }
 
-    /**
-     * @TODO: Extract method.
-     *
-     * @param Request  $request
-     * @param Response $response
-     *
-     * @return Response
-     */
-    private function serializeControllerResponse(Request $request, Response $response)
-    {
-        $json = new Type\Json;
-        $text = new Type\PlainText;
-        $notAcceptable = new Type\NotAcceptable;
-        $json->setSuccessor($text);
-        $text->setSuccessor($notAcceptable);
+        switch ($this->request->getMethod()) {
+            case 'GET':
+                return CreateResponse::to($contentType, $this->phrases->execute());
+                break;
+            default:
+                $message = sprintf('Method %s not expected', $this->request->getMethod());
+                $response = new Response();
+                $response->setStatusCode(Response::STATUS_CODE_405);
+                $response->setContent($message);
 
-        return $json->handlerResponse($request, $response);
+                return $response;
+        }
+
     }
 }

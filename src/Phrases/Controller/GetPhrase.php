@@ -2,41 +2,17 @@
 
 namespace Phrases\Controller;
 
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Phrases\Entity\Phrase;
-use Phrases\Persistence\RepositoryInterface;
-
-class GetPhrase implements ExecutionInterface
+class GetPhrase
 {
-    /**
-     * @var RepositoryInterface
-     */
     private $currentPhrases;
 
-    /**
-     * Constructor.
-     *
-     * @param RepositoryInterface $existingPhrases
-     */
-    public function __construct(RepositoryInterface $existingPhrases)
+    public function __construct(array $existingPhrases)
     {
         $this->currentPhrases = $existingPhrases;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function execute(Request $request)
+    public function execute()
     {
-        $phrase = $this->currentPhrases->findOneRandom();
-        $response = new Response;
-
-        if (! $phrase instanceof Phrase) {
-            return $response;
-        }
-        $response->setContent($phrase->getText());
-
-        return $response;
+        return array_shift($this->currentPhrases);
     }
 }
