@@ -109,4 +109,9 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
             'Expected URL of created Phrase'
         );
     }
+
+    public function testPostNewPhrase()
+    {
+        
+    }
 }
