@@ -22,6 +22,8 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     private $request;
 
+    private $phrase;
+
     /**
      * @Given a new Request object
      */
@@ -59,6 +61,51 @@ EOB;
     {
         /** @var $response Zend\Http\Response */
         $response = $this->application->fetchResponse();
-        return '[Jack Makiyama]' == $response->getBody();
+        $response->getBody();
+    }
+
+    /**
+     * @Given a phrase :phrase
+     */
+    public function createAPhrase($phrase)
+    {
+        $this->phrase = new StdClass();
+        $this->phrase->text = $phrase;
+    }
+
+    /**
+     * @Given a title :title
+     */ 
+    public function setTitleIntoPhrase($title)
+    {
+        $this->phrase->title = $title;
+    }
+
+    /**
+     * @When I POST the phrase to :resource
+     */
+    public function createPostRequest($resource)
+    {
+        $ch = curl_init('http://localhost');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, [
+            'title' => $this->phrase->title,
+            'text' => $this->phrase->text,
+        ]);
+
+        curl_exec($ch);
+        $this->statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    }
+
+    /**
+     * @Then HTTP status code should be :statusCode
+     */ 
+    public function checkReponseStatusCode($statusCode)
+    {
+        if ($this->statusCode !== $statusCode) {
+            throw new Exception(
+                sprintf('Expected status code %s received %s', $statusCode, $this->statusCode)
+            );
+        }
     }
 }

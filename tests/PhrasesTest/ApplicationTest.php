@@ -29,4 +29,9 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($consumedData[0], $phrase);
     }
+
+    public function testPostNewPhrase()
+    {
+        
+    }
 }
