@@ -53,6 +53,9 @@ class Application
             case 'GET':
                 return CreateResponse::to($contentType, $this->phrases->execute());
                 break;
+            case 'POST':
+                $post = new Controller\PostPhrase((array) $this->request->getPost());
+                return $post->execute();
             default:
                 $message = sprintf('Method %s not expected', $this->request->getMethod());
                 $response = new Response();
