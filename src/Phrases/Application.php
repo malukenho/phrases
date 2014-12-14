@@ -3,9 +3,10 @@ namespace Phrases;
 
 use Phrases\Http\Response\Sender;
 use Zend\Stdlib\RequestInterface;
-use Zend\Http\PhpEnvironment\Request;
+use Zend\Http\PhpEnvironment\Request as EnvRequest;
 use Zend\Http\Headers;
 use Zend\Http\Response;
+use Zend\Http\Request;
 use Phrases\Http\Response\CreateResponse;
 
 class Application
@@ -24,12 +25,12 @@ class Application
      * Constructor.
      *
      * @param string[]         $phrases
-     * @param RequestInterface $request {@see \Zend\Stdlib\RequestInterface}
+     * @param RequestInterface $request {@see \Zend\Http\Request}
      */
-    public function __construct(array $phrases, RequestInterface $request = null)
+    public function __construct(array $phrases, Request $request = null)
     {
-        $this->phrases = new Controller\GetPhrase($phrases);
-        $this->request = is_null($request) ? new Request() : $request;
+        $this->phrases = $phrases;
+        $this->request = is_null($request) ? new EnvRequest() : $request;
     }
 
     /**
@@ -39,31 +40,23 @@ class Application
      */
     public function fetchResponse()
     {
-        $contentType = $this
-            ->request
-                ->getHeaders()
-                ->get('Accept');
+        $this->ensureAcceptHeaderExistsOnRequest($this->request);
+        $controllerFactory = new Controller\Factory($this->phrases);
+        $controller = $controllerFactory->forHttpMethod($this->request);
 
-        if (false === $contentType) {
-            $headers = Headers::fromString('Accept: application/json');
-            $contentType = $headers->get('Accept');
+        return $controller->execute($this->request);
+    }
+
+    /**
+     * @TODO: Extract method
+     */
+    private function ensureAcceptHeaderExistsOnRequest(Request $request, $defaultAccept = 'plain/text')
+    {
+        $currentAccept = $request->getHeaders('Accept');
+        if (false === $currentAccept) {
+            $defaultAcceptHeaders = Headers::fromString('Accept: '.$defaultAccept);
+            $defaultAcceptHeader = $defaultAcceptHeaders->get('Accept');
+            $request->getHeaders()->addHeaders($defaultAcceptHeaders);
         }
-
-        switch ($this->request->getMethod()) {
-            case 'GET':
-                return CreateResponse::to($contentType, $this->phrases->execute());
-                break;
-            case 'POST':
-                $post = new Controller\PostPhrase((array) $this->request->getPost());
-                return $post->execute();
-            default:
-                $message = sprintf('Method %s not expected', $this->request->getMethod());
-                $response = new Response();
-                $response->setStatusCode(Response::STATUS_CODE_405);
-                $response->setContent($message);
-
-                return $response;
-        }
-
     }
 }

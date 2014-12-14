@@ -2,8 +2,9 @@
 namespace Phrases\Controller;
 
 use Zend\Http\Response;
+use Zend\Http\Request;
 
-class PostPhrase
+class PostPhrase implements ExecutionInterface
 {
 	private $data;
 
@@ -22,7 +23,7 @@ class PostPhrase
 		return !array_diff($mandatoryKeys, array_keys($this->data));
 	}
 
-	public function execute()
+	public function execute(Request $request)
 	{
 		$response = new Response();
 
