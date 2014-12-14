@@ -9,9 +9,6 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src</directory>
-            <exclude>
-                <file>tests/PhrasesTest/Persistance/AbstractRelationalTestCase.php</file>
-            </exclude>
         </whitelist>
     </filter>
 </phpunit>

@@ -2,21 +2,11 @@
 
 use Phrases\Controller;
 
-/**
- * @small
- */
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
-    private $persistance;
-
-    public function setUp()
-    {
-        $this->persistance = $this->getMock('Phrases\Persistence\RepositoryInterface');
-    }
-
     public function testCreateControllerForGetHttpMethod()
     {
-        $factory = new Controller\Factory($this->persistance);
+        $factory = new Controller\Factory;
         $request = $this->getMockBuilder('Zend\Http\Request')
             ->getMock();
         $request->expects($this->once())
@@ -30,9 +20,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException Exception
+     * @TODO Expect a controller that returns an error
+     */
     public function testCreateControllerForPostHttpMethod()
     {
-        $factory = new Controller\Factory($this->persistance);
+        $factory = new Controller\Factory;
         $request = $this->getMockBuilder('Zend\Http\Request')
             ->getMock();
         $request->expects($this->once())
@@ -40,8 +34,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $resultingController = $factory->forHttpMethod($request);
 
+        // Missing implementation ----v
         $this->assertInstanceOf(
-            'Phrases\Controller\Error',
+            'Phrases\Controller\ErrorController',
             $resultingController
         );
     }

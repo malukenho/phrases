@@ -30,6 +30,10 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $request->setHeaders(Headers::fromString('Accept: plain/text'));
         $app = new Application($phrases, $request);
         $response = $app->fetchResponse();
+        $this->assertInstanceOf(
+            'Zend\Http\Response',
+            $response
+        );
         $this->assertEquals(
             200,
             $response->getStatusCode()
@@ -46,7 +50,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $request = new Request;
         $header = new Headers;
         $parameters = new Parameters([
-            'title' => 'jajaja',
+            'title' => 'É nóis que voa bruxão',
             'text'  => 'hehe'
         ]);
         $request->setMethod('POST');
@@ -54,9 +58,19 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $request->setPost($parameters);
         $app = new Application(ConsumedData::asArray(), $request);
         $response = $app->fetchResponse();
+        $this->assertInstanceOf(
+            'Zend\Http\Response',
+            $response
+        );
         $this->assertEquals(
             201,
             $response->getStatusCode()
+        );
+        $expectedUrlPath = '/e-nois-que-voa-bruxao';
+        $this->assertContains(
+            $expectedUrlPath,
+            $response->getBody(),
+            'Expected URL of created Phrase'
         );
     }
 }
