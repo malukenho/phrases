@@ -20,10 +20,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException Exception
-     * @TODO Expect a controller that returns an error
-     */
     public function testCreateControllerForPostHttpMethod()
     {
         $factory = new Controller\Factory;
@@ -34,9 +30,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $resultingController = $factory->forHttpMethod($request);
 
-        // Missing implementation ----v
         $this->assertInstanceOf(
-            'Phrases\Controller\ErrorController',
+            'Phrases\Controller\Error',
             $resultingController
         );
     }

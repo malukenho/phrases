@@ -19,6 +19,6 @@ class Factory
             return new GetPhrase($this->constructorArgs);
         }
 
-        throw new \Exception('Method not implemented.');
+        return new Error(405, 'Method not allowed');
     }
 }
