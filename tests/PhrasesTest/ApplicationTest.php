@@ -38,7 +38,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
             200,
             $response->getStatusCode()
         );
-        $expectedPhrase = $phrases[0];
+        $expectedPhrase = '"'.$phrases[0].'"';
         $this->assertEquals(
             $expectedPhrase,
             $response->getBody()

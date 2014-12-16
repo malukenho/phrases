@@ -2,6 +2,7 @@
 namespace Phrases;
 
 use Phrases\Http\Response\Sender;
+use Phrases\Http\Response\Type;
 use Zend\Stdlib\RequestInterface;
 use Zend\Http\PhpEnvironment\Request as EnvRequest;
 use Zend\Http\Headers;
@@ -43,8 +44,9 @@ class Application
         $this->ensureAcceptHeaderExistsOnRequest($this->request);
         $controllerFactory = new Controller\Factory($this->phrases);
         $controller = $controllerFactory->forHttpMethod($this->request);
+        $response = $controller->execute($this->request);
 
-        return $controller->execute($this->request);
+        return $this->serializeControllerResponse($this->request, $response);
     }
 
     /**
@@ -58,5 +60,19 @@ class Application
             $defaultAcceptHeader = $defaultAcceptHeaders->get('Accept');
             $request->getHeaders()->addHeaders($defaultAcceptHeaders);
         }
+    }
+
+    /**
+     * @TODO: Extract method.
+     */
+    private function serializeControllerResponse(Request $request, Response $response)
+    {
+        $json = new Type\Json;
+        $text = new Type\PlainText;
+        $notAcceptable = new Type\NotAcceptable;
+        $json->setSuccessor($text);
+        $text->setSuccessor($notAcceptable);
+
+        return $json->handlerResponse($request, $response);
     }
 }
