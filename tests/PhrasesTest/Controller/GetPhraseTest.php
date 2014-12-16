@@ -8,14 +8,8 @@ class GetPhraseTest extends \PHPUnit_Framework_TestCase
 {
     private function createStubRequestObject($mimeType = 'plain/text')
     {
-        $accept = Headers::fromString('Accept: '.$mimeType);
-        $request = $this->getMockBuilder('Zend\Http\Request')
+        return $this->getMockBuilder('Zend\Http\Request')
             ->getMock();
-        $request->expects($this->once())
-            ->method('getHeaders')
-            ->will($this->returnValue($accept));
-
-        return $request;
     }
 
     public function testGetSinglePhraseWhenOnlyOnePhraseExists()

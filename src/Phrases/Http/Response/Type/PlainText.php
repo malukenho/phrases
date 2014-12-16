@@ -1,7 +1,7 @@
 <?php
 namespace Phrases\Http\Response\Type;
 
-use Zend\Http\Response;
+use Zend\Http;
 use Phrases\Http\Response\AbstractResponse;
 
 /**
@@ -14,14 +14,14 @@ class PlainText extends AbstractResponse
     /**
      * {@inheritDoc}
      */
-    public function response()
+    public function serialize(Http\Response $response)
     {
-        $response = new Response();
-        $response->setStatusCode(Response::STATUS_CODE_200);
-        $response->setContent($this->phrase);
         $response->getHeaders()->addHeaders([
             'Content-Type' => 'text/plain'
         ]);
+        $content = $response->getContent();
+        $content = htmlentities($content);
+        $response->setContent((string) $content);
 
         return $response;
     }
@@ -29,9 +29,10 @@ class PlainText extends AbstractResponse
     /**
      * {@inheritDoc}
      */
-    public function canResolve()
+    public function canResolve(Http\Request $request)
     {
-        $accept = $this->accept;
+        $accept = $request->getHeaders()->get('Accept');
+
         return $accept->hasMediaType('plain') || $accept->hasMediaType('text/plain');
     }
 }

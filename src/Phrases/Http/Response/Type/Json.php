@@ -1,7 +1,7 @@
 <?php
 namespace Phrases\Http\Response\Type;
 
-use Zend\Http\Response;
+use Zend\Http;
 use Phrases\Http\Response\AbstractResponse;
 
 /**
@@ -14,11 +14,10 @@ class Json extends AbstractResponse
     /**
      * {@inheritDoc}
      */
-    public function response()
+    public function serialize(Http\Response $response)
     {
-        $response = new Response();
-        $response->setStatusCode(Response::STATUS_CODE_200);
-        $response->setContent(json_encode([$this->phrase]));
+        $content = $response->getContent();
+        $response->setContent(json_encode($content));
         $response->getHeaders()->addHeaders([
             'Content-Type' => 'application/json'
         ]);
@@ -29,9 +28,10 @@ class Json extends AbstractResponse
     /**
      * {@inheritDoc}
      */
-    public function canResolve()
+    public function canResolve(Http\Request $request)
     {
-        $accept = $this->accept;
+        $accept = $request->getHeaders()->get('Accept');
+
         return $accept->hasMediaType('json') || $accept->hasMediaType('application/json');
     }
 }
