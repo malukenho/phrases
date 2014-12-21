@@ -3,14 +3,15 @@
 namespace Phrases\Controller;
 
 use Zend\Http\Request;
+use Phrases\Persistance;
 
 class Factory
 {
     private $constructorArgs = null;
 
-    public function __construct(array $useConstructorArgs=[])
+    public function __construct(Persistance\RepositoryInterface $phrases)
     {
-        $this->constructorArgs = $useConstructorArgs;
+        $this->constructorArgs = $phrases;
     }
 
     public function forHttpMethod(Request $request)

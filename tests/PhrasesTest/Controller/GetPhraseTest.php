@@ -3,7 +3,11 @@
 namespace Phrases\Controller;
 
 use Zend\Http\Headers;
+use Phrases\Persistance\Memory;
 
+/**
+ * @medium
+ */
 class GetPhraseTest extends \PHPUnit_Framework_TestCase
 {
     private function createStubRequestObject($mimeType = 'plain/text')
@@ -12,10 +16,15 @@ class GetPhraseTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    private function createMemoryPersistanceForPhraseArray(array $list)
+    {
+        return new Memory($list);
+    }
+
     public function testGetSinglePhraseWhenOnlyOnePhraseExists()
     {
         $expectedPhrase = 'Eu sou lindo';
-        $phrases = [$expectedPhrase];
+        $phrases = $this->createMemoryPersistanceForPhraseArray([$expectedPhrase]);
         $controller = new GetPhrase($phrases);
         $request = $this->createStubRequestObject();
         $response = $controller->execute($request);
@@ -29,14 +38,15 @@ class GetPhraseTest extends \PHPUnit_Framework_TestCase
     public function testGetSinglePhraseWhenMoreThanOnePhraseExists()
     {
         $expectedPhrase = 'Eu sou lindo';
-        $phrases = [$expectedPhrase, 'Eu sou feio'];
+        $phraseList = [$expectedPhrase, 'Eu sou feio'];
+        $phrases = $this->createMemoryPersistanceForPhraseArray($phraseList);
         $controller = new GetPhrase($phrases);
         $request = $this->createStubRequestObject();
         $response = $controller->execute($request);
         $this->assertInstanceOf('Zend\Http\Response', $response);
-        $this->assertEquals(
-            $expectedPhrase,
-            $response->getContent()
+        $this->assertContains(
+            $response->getContent(),
+            $phraseList
         );
     }
 }

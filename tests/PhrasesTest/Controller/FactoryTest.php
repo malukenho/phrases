@@ -2,11 +2,21 @@
 
 use Phrases\Controller;
 
+/**
+ * @small
+ */
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
+    private $persistance;
+
+    public function setUp()
+    {
+        $this->persistance = $this->getMock('Phrases\Persistance\RepositoryInterface');
+    }
+
     public function testCreateControllerForGetHttpMethod()
     {
-        $factory = new Controller\Factory;
+        $factory = new Controller\Factory($this->persistance);
         $request = $this->getMockBuilder('Zend\Http\Request')
             ->getMock();
         $request->expects($this->once())
@@ -22,7 +32,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateControllerForPostHttpMethod()
     {
-        $factory = new Controller\Factory;
+        $factory = new Controller\Factory($this->persistance);
         $request = $this->getMockBuilder('Zend\Http\Request')
             ->getMock();
         $request->expects($this->once())

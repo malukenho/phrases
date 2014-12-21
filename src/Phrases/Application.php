@@ -9,6 +9,7 @@ use Zend\Http\Headers;
 use Zend\Http\Response;
 use Zend\Http\Request;
 use Phrases\Http\Response\CreateResponse;
+use Phrases\Persistance;
 
 class Application
 {
@@ -28,7 +29,7 @@ class Application
      * @param string[]         $phrases
      * @param RequestInterface $request {@see \Zend\Http\Request}
      */
-    public function __construct(array $phrases, Request $request = null)
+    public function __construct(Persistance\RepositoryInterface $phrases, Request $request = null)
     {
         $this->phrases = $phrases;
         $this->request = is_null($request) ? new EnvRequest() : $request;
