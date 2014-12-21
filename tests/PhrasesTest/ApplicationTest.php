@@ -2,33 +2,40 @@
 namespace PhrasesTest;
 
 use Phrases\Application;
+use Phrases\Persistance\Memory;
 use PHPUnit_Framework_TestCase;
 use PhrasesTestAsset\ConsumedData;
 use Zend\Http\Request;
 use Zend\Http\Headers;
 use Zend\StdLib\Parameters;
 
+/**
+ * @huge
+ */
 class ApplicationTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Application
      */
     private $application;
+    private $persistance;
 
     public function setUp()
     {
-        $this->application = new Application(ConsumedData::asArray());
+        $phrases = ConsumedData::asArray();
+        $onePhrase = array_shift($phrases);
+        $this->persistance = new Memory([$onePhrase]);
+        $this->application = new Application($this->persistance);
     }
 
     public function testGetPhraseAsPlainText()
     {
-        $phrases = ConsumedData::asArray();
         $request = new Request;
         $header = new Headers;
         $request->setMethod('GET');
         $request->setUri('http://localhost/');
         $request->setHeaders(Headers::fromString('Accept: plain/text'));
-        $app = new Application($phrases, $request);
+        $app = new Application($this->persistance, $request);
         $response = $app->fetchResponse();
         $this->assertInstanceOf(
             'Zend\Http\Response',
@@ -38,7 +45,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
             200,
             $response->getStatusCode()
         );
-        $expectedPhrase = '"'.$phrases[0].'"';
+        $expectedPhrase = '"Jack Makiyama"';
         $this->assertEquals(
             $expectedPhrase,
             $response->getBody()
@@ -56,7 +63,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $request->setMethod('POST');
         $request->setUri('http://localhost/');
         $request->setPost($parameters);
-        $app = new Application(ConsumedData::asArray(), $request);
+        $app = new Application($this->persistance, $request);
         $response = $app->fetchResponse();
         $this->assertInstanceOf(
             'Zend\Http\Response',
