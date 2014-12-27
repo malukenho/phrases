@@ -2,53 +2,62 @@
 
 namespace Phrases\Persistance;
 
-use \Pdo;
+use PDO;
 
-class Relational implements RepositoryInterface
+abstract class Relational implements RepositoryInterface
 {
     /**
-     * @var \Pdo
+     * @var PDO
      */
-    protected $pdo;
+    private $pdoInstance;
+    /**
+     * @return PDOStatement
+     */
+    abstract protected function createFindOneRandomStatement();
+    /**
+     * @return PDOStatement
+     */
+    abstract protected function createInsertStatement();
+    /**
+     * @return boolean
+     */
+    abstract public function createTables();
 
-    public function __construct(Pdo $pdo)
+    public function __construct(PDO $pdoInstance)
     {
-        $this->pdo = $pdo;
+        $this->pdoInstance = $pdoInstance;
     }
 
-    public function findOneRandom()
+    /**
+     * @return PDO
+     */
+    protected function getPdo()
     {
-        $list = $this->getAll();
+        return $this->pdoInstance;
+    }
 
-        if (empty($list)) {
-            return $list;
+
+
+    final public function findOneRandom()
+    {
+        $findOneStatement = $this->createFindOneRandomStatement();
+        $findOneStatement->execute();
+        $onePhrase = $findOneStatement->fetch(PDO::FETCH_ASSOC);
+        if (empty($onePhrase)) {
+            return [];
         }
 
-        shuffle($list);
-
-        return $list[0];
+        return $onePhrase;
     }
 
-    private function getAll()
+    final public function save(array $phrase)
     {
-        $stm = $this->pdo
-                    ->prepare('SELECT id, title, text FROM phrases;');
+        $pdo = $this->getPdo();
+        $insert = $this->createInsertStatement();
+        $insert->bindValue(':title', $phrase['title'], Pdo::PARAM_STR);
+        $insert->bindValue(':text',  $phrase['text'],  Pdo::PARAM_STR);
+        $insert->execute();
 
-        $stm->execute();
-
-        return $stm->fetchAll(Pdo::FETCH_ASSOC);
-    }
-
-    public function save(array $phrase)
-    {
-        $stm = $this->pdo
-                    ->prepare('INSERT INTO phrases(title, text) VALUES(:title, :text);');
-
-        $stm->bindValue(':title', $phrase['title'], Pdo::PARAM_STR);
-        $stm->bindValue(':text',  $phrase['text'],  Pdo::PARAM_STR);
-
-        $stm->execute();
-
-        return (int) $this->pdo->lastInsertId();
+        return (int) $pdo->lastInsertId();
     }
 }
