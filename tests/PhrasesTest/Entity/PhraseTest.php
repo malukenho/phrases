@@ -4,33 +4,73 @@ namespace Phrases\Entity;
 
 class PhraseTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInstantiationWithoutArgumentsShouldNotWork()
+    public function setUp()
     {
-        new Phrase(null, null);
+        $this->phrase = new Phrase;
     }
 
-    public function testInstantiationOfAPhraseIsCompositeWithTitleAndText()
+    public function testSetTitleWithValidDataShouldWork()
     {
         $title  = 'Eu só acho';
-        $text  = 'Eu só acho que eu deveria codar mais =/';
+        $phrase = $this->phrase;
 
-        $phrase = new Phrase($title, $text);
+        $return = $phrase->setTitle($title);
 
+        $this->assertEquals($return, $phrase);
         $this->assertAttributeEquals($title, 'title', $phrase);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Title empty not valid
+     */
+    public function testSetTitleWithInvalidDataDontWork()
+    {
+        $title = null;
+        $phrase = $this->phrase;
+
+        $phrase->setTitle($title);
+    }
+
+    public function testShouldSetAndGetTheTitle()
+    {
+        $title = 'Hoje até que rendeu legal';
+        $phrase = $this->phrase;
+        $phrase->setTitle($title);
+
+        $this->assertEquals($title, $phrase->getTitle());
+    }
+
+    public function testSetTextWithValidDataShouldWork()
+    {
+        $text  = 'Eu só acho que eu deveria codar mais =/';
+        $phrase = $this->phrase;
+
+        $return = $phrase->setText($text);
+
+        $this->assertEquals($return, $phrase);
         $this->assertAttributeEquals($text, 'text', $phrase);
     }
 
-    public function testShouldGetTheTitleAndText()
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Text empty not valid
+     */
+    public function testSetTextWithInvalidDataDontWork()
     {
-        $title = 'Hoje até que rendeu legal';
+        $text = null;
+        $phrase = $this->phrase;
+
+        $phrase->setText($text);
+    }
+
+    public function testShouldSetAndGetTheText()
+    {
         $text = 'Acho que pode rolar mais vezes, pois rende bastante, assim não fica só nas costas do Augusto';
+        $phrase = $this->phrase;
+        $phrase->setText($text);
 
-        $phrase = new Phrase($title, $text);
-
-        $this->assertEquals($title, $phrase->getTitle());
         $this->assertEquals($text, $phrase->getText());
     }
 }
+
