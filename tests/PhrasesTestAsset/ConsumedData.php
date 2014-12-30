@@ -1,4 +1,5 @@
 <?php
+
 namespace PhrasesTestAsset;
 
 class ConsumedData
