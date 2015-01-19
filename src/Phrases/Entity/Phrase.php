@@ -2,22 +2,15 @@
 
 namespace Phrases\Entity;
 
-use \InvalidArgumentException;
-
 class Phrase
 {
     protected $title;
     protected $text;
 
-    public function setTitle($title)
+    public function __construct($title, $text)
     {
-        if (empty($title)) {
-            throw new InvalidArgumentException('Title empty not valid');
-        }
-
         $this->title = $title;
-
-        return $this;
+        $this->text  = $text;
     }
 
     public function getTitle()
@@ -25,20 +18,8 @@ class Phrase
         return $this->title;
     }
 
-    public function setText($text)
-    {
-        if (empty($text)) {
-            throw new InvalidArgumentException('Text empty not valid');
-        }
-
-        $this->text = $text;
-
-        return $this;
-    }
-
     public function getText()
     {
         return $this->text;
     }
 }
-
