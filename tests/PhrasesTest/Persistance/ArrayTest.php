@@ -2,14 +2,27 @@
 
 namespace Phrases\Persistance;
 
+use Phrases\Entity\Phrase;
+use PhrasesTestAsset\ConsumedData;
+
 /**
  * @small
  */
 class MemoryTest extends \PHPUnit_Framework_TestCase
 {
+    protected $phraseList = [];
+
+    protected function setUp()
+    {
+        foreach(ConsumedData::asRelationalArray() as $value){
+            $phrase = new Phrase($value['title'], $value['text']);
+            array_push($this->phraseList, $phrase);
+        }
+    }
+
     public function testFindOneRandomWithAnEmptyListReturnAnEmptyArray()
     {
-        $list = array();
+        $list = [];
         $phrases = new Memory($list);
 
         $this->assertInstanceOf(
@@ -17,7 +30,7 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
             $phrases
         );
         $this->assertEquals(
-            $expected = array(),
+            $expected = [],
             $phrases->findOneRandom()
         );
     }
@@ -25,7 +38,7 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
     public function testFindOneRandomWithOnlyOnePhraseInTheListAlwaysReturnTheSamePhrase()
     {
         $list = [
-            $expectedPhrase = ['title'=>'test', 'text'=>'Something interesting, but not interesting enough.']
+            $expectedPhrase = $this->phraseList[0]
         ];
         $phrases = new Memory($list);
 
@@ -42,13 +55,7 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
 
     public function testFindOneRandomWithPhrasesInTheListReturnsFromTheList()
     {
-        $list = [
-            ['title'=>'test', 'text'=>'Something interesting, but not interesting enough.'],
-            ['title'=>'Something', 'text'=>'It is always something.'],
-            ['title'=>'Atlas Shrugged', 'text'=>'You should really read this book.'],
-            ['title'=>'Caves of Steel', 'text'=>'Isac Azimov is a must read for evey developer.'],
-            ['title'=>'Augusto Lindo', 'text'=>'Sua beleza é incomparável.']
-        ];
+        $list = $this->phraseList;
         $phrases = new Memory($list);
 
         $this->assertContains(
@@ -72,14 +79,26 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAppendsPhraseIntoExistingPhraseList()
     {
-        $phrases = new Memory(array());
-        $newPhrase = ['title'=>'Gugu gostoso', 'text'=>'Pode parecer, mas eu não sou nascisista. Sou realmente gostoso.'];
+        $phrases = new Memory([$this->phraseList[0]]);
+        $newPhrase = $this->phraseList[1];
 
-        $phrases->save($newPhrase);
+        $return = $phrases->save($newPhrase);
         $this->assertEquals(
             $newPhrase,
-            $phrases->findOneRandom(),
-            'Finding one random phrase, when the only one available is the one we saved, should work.'
+            $return
         );
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Phrase list should contain only Phrase entities.
+     */
+    public function testMemoryInstantiatedWithArrayOfArraysThrowsAnException()
+    {
+        $phraseList = [
+            ['title' => 'Its a phrase.']
+        ];
+        $phrases = new Memory($phraseList);
+    }
 }
+
