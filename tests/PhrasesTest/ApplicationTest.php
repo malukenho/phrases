@@ -8,6 +8,7 @@ use PhrasesTestAsset\ConsumedData;
 use Zend\Http\Request;
 use Zend\Http\Headers;
 use Zend\StdLib\Parameters;
+use Phrases\Entity\Phrase;
 
 /**
  * @huge
@@ -22,8 +23,8 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $phrases = ConsumedData::asArray();
-        $onePhrase = array_shift($phrases);
+        $phrases = ConsumedData::asRelationalArray()[0];
+        $onePhrase = new Phrase($phrases['title'], $phrases['text']);
         $this->persistance = new Memory([$onePhrase]);
         $this->application = new Application($this->persistance);
     }
@@ -44,7 +45,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
             200,
             $response->getStatusCode()
         );
-        $expectedPhrase = '"Jack Makiyama"';
+        $expectedPhrase = '"Something interesting, but not interesting enough."';
         $this->assertEquals(
             $expectedPhrase,
             $response->getBody()

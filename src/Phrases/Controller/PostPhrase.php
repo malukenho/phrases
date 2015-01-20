@@ -35,8 +35,8 @@ class PostPhrase implements ExecutionInterface
         $response = new Response();
 
         if ($this->isValidPostData()) {
-            $this->repository->save($this->data);
             $entity = new Phrase($this->data['title'], $this->data['text']);
+            $this->repository->save($entity);
             $response->setContent($entity->getSlug());
             return $response->setStatusCode(Response::STATUS_CODE_201);
         }

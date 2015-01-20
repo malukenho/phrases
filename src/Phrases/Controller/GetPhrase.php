@@ -19,7 +19,7 @@ class GetPhrase implements ExecutionInterface
     {
         $phrase = $this->currentPhrases->findOneRandom();
         $response = new Response;
-        $response->setContent($phrase);
+        $response->setContent($phrase->getText());
 
         return $response;
     }
