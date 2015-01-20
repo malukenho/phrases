@@ -3,6 +3,7 @@ namespace Phrases;
 
 use Phrases\Http\Response\Sender;
 use Phrases\Http\Response\Type;
+use Phrases\Persistance\RepositoryInterface;
 use Zend\Stdlib\RequestInterface;
 use Zend\Http\PhpEnvironment\Request as EnvRequest;
 use Zend\Http\Headers;
@@ -26,10 +27,10 @@ class Application
     /**
      * Constructor.
      *
-     * @param string[]         $phrases
-     * @param RequestInterface $request {@see \Zend\Http\Request}
+     * @param RepositoryInterface      $phrases
+     * @param Request|RequestInterface $request {@see \Zend\Http\Request}
      */
-    public function __construct(Persistance\RepositoryInterface $phrases, Request $request = null)
+    public function __construct(RepositoryInterface $phrases, Request $request = null)
     {
         $this->phrases = $phrases;
         $this->request = is_null($request) ? new EnvRequest() : $request;
