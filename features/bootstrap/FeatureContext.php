@@ -24,8 +24,6 @@ class FeatureContext implements Context, SnippetAcceptingContext
     private $phrase;
     private $statusCode;
 
-    private $phrase;
-
     /**
      * @Given a new Request object
      */
