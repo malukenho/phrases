@@ -3,6 +3,7 @@
 namespace Phrases\Controller;
 
 use Zend\Http\Headers;
+use Phrases\Persistance\RepositoryInterface;
 
 class PostPhraseTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,13 +23,21 @@ class PostPhraseTest extends \PHPUnit_Framework_TestCase
         return $request;
     }
 
+    private function getMockForRepositoryInterface()
+    {
+        $repository = $this->getMockBuilder(RepositoryInterface::class)
+            ->getMock();
+
+        return $repository;
+    }
+
     public function testPostWithInvalidDataReturnHttpStatuscode400()
     {
         $postData = [
             'title' => 'Lorem ipsum'
         ];
 
-        $post = new PostPhrase($postData);
+        $post = new PostPhrase($this->getMockForRepositoryInterface(), $postData);
         $request = $this->createStubRequestObject();
         $response = $post->execute($request);
 
@@ -43,7 +52,7 @@ class PostPhraseTest extends \PHPUnit_Framework_TestCase
             'text'  => 'Lorem ipsum'
         ];
 
-        $post = new PostPhrase($postData);
+        $post = new PostPhrase($this->getMockForRepositoryInterface(), $postData);
         $request = $this->createStubRequestObject();
         $response = $post->execute($request);
 
