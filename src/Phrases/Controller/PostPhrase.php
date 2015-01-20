@@ -1,6 +1,7 @@
 <?php
 namespace Phrases\Controller;
 
+use Cocur\Slugify\Slugify;
 use Phrases\Persistance\RepositoryInterface;
 use Zend\Http\Response;
 use Zend\Http\Request;
@@ -35,7 +36,7 @@ class PostPhrase implements ExecutionInterface
 
         if ($this->isValidPostData()) {
             $this->repository->save($this->data);
-            $response->setContent();
+            $response->setContent("/" . (new Slugify())->slugify($this->data['title']));
             return $response->setStatusCode(Response::STATUS_CODE_201);
         }
 
