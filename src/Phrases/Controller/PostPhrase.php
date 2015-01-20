@@ -1,16 +1,22 @@
 <?php
 namespace Phrases\Controller;
 
+use Phrases\Persistance\RepositoryInterface;
 use Zend\Http\Response;
 use Zend\Http\Request;
 
 class PostPhrase implements ExecutionInterface
 {
-    private $data;
+    /**
+     * @var RepositoryInterface
+     */
+    protected $repository;
+    protected $data;
 
-    public function __construct(array $postData)
+    public function __construct(RepositoryInterface $repository, array $postData)
     {
-        $this->data = $postData;
+        $this->repository = $repository;
+        $this->data       = $postData;
     }
 
     protected function isValidPostData()
@@ -28,6 +34,8 @@ class PostPhrase implements ExecutionInterface
         $response = new Response();
 
         if ($this->isValidPostData()) {
+            $this->repository->save($this->data);
+            $response->setContent();
             return $response->setStatusCode(Response::STATUS_CODE_201);
         }
 
