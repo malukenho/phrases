@@ -3,6 +3,7 @@
 namespace Phrases\Persistance;
 
 use PDO;
+use Phrases\Entity\Phrase;
 
 abstract class Relational implements RepositoryInterface
 {
@@ -42,7 +43,8 @@ abstract class Relational implements RepositoryInterface
     {
         $findOneStatement = $this->createFindOneRandomStatement();
         $findOneStatement->execute();
-        $onePhrase = $findOneStatement->fetch(PDO::FETCH_ASSOC);
+        $findOneStatement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Phrase::class, ['temp_title', 'temp_text']);
+        $onePhrase = $findOneStatement->fetch();
         if (empty($onePhrase)) {
             return [];
         }
@@ -50,14 +52,15 @@ abstract class Relational implements RepositoryInterface
         return $onePhrase;
     }
 
-    final public function save(array $phrase)
+    final public function save(Phrase $phrase)
     {
         $pdo = $this->getPdo();
         $insert = $this->createInsertStatement();
-        $insert->bindValue(':title', $phrase['title'], Pdo::PARAM_STR);
-        $insert->bindValue(':text',  $phrase['text'],  Pdo::PARAM_STR);
+        $insert->bindValue(':title', $phrase->getTitle(), Pdo::PARAM_STR);
+        $insert->bindValue(':text',  $phrase->getText(),  Pdo::PARAM_STR);
         $insert->execute();
 
         return (int) $pdo->lastInsertId();
     }
 }
+

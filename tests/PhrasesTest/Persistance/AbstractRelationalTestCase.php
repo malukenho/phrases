@@ -2,6 +2,7 @@
 namespace Phrases\Persistance;
 
 use Pdo;
+use Phrases\Entity\Phrase;
 use PhrasesTestAsset\ConsumedData;
 
 abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
@@ -15,6 +16,7 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
      * @var \Phrases\Persistance\Relational
      */
     protected $relational;
+    protected $existingTitles = [];
 
     protected function setUp()
     {
@@ -23,6 +25,12 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($this->relational, 'Please, set up a relational adapter on the test case.');
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->relationalProvider = ConsumedData::asRelationalArray();
+        $this->relationalEntityPhraseProvider = [];
+        foreach(ConsumedData::asRelationalArray() as $value){
+            $phrase = new Phrase($value['title'], $value['text']);
+            array_push($this->relationalEntityPhraseProvider, $phrase);
+            array_push($this->existingTitles, $value['title']);
+        }
     }
 
     abstract protected function createPersistanceAdapter();
@@ -37,7 +45,6 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
         $stm = $this->pdo
                     ->prepare('INSERT INTO phrases(title, text) VALUES(:title, :text);');
 
-        //$stm->bindValue(':id',    $list['id'],    Pdo::PARAM_INT);
         $stm->bindValue(':title', $list['title'], Pdo::PARAM_STR);
         $stm->bindValue(':text',  $list['text'],  Pdo::PARAM_STR);
 
@@ -53,17 +60,14 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
             $phrases
         );
         $this->assertEquals(
-            $expected = array(),
+            $expected = [],
             $phrases->findOneRandom()
         );
     }
 
     public function testSavePhraseReturnsInsertedId()
     {
-        $phrase = [
-            'title' => 'New Phrase',
-            'text' => 'Hi, I am new!'
-        ];
+        $phrase = new Phrase('New Phrase', 'Hi, I am new!');
         $insertedId = $this->relational->save($phrase);
         $this->assertEquals(
             1,
@@ -77,18 +81,18 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testFindOneRandomWithOnlyOnePhraseInTheTableAlwaysReturnTheSamePhrase()
     {
-        $expectedPhrase = $this->relationalProvider[0];
-        $this->populatePhrasesTable($expectedPhrase);
+        $phrase = $this->relationalProvider[0];
+        $this->populatePhrasesTable($phrase);
 
         $phrases = $this->relational;
 
         $this->assertEquals(
-            $expectedPhrase,
-            $phrases->findOneRandom()
+            $phrase['title'],
+            $phrases->findOneRandom()->getTitle()
         );
         $this->assertEquals(
-            $expectedPhrase,
-            $phrases->findOneRandom(),
+            $phrase['text'],
+            $phrases->findOneRandom()->getText(),
             'Only one phrase is present on the list, so it should be the only "random" option.'
         );
     }
@@ -99,6 +103,7 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
     public function testFindOneRandomWithPhrasesInTheTableReturnsFromTheList()
     {
         $list = $this->relationalProvider;
+        $listEntityPhrase = $this->relationalEntityPhraseProvider;
 
         foreach ($list as $value) {
             $this->populatePhrasesTable($value);
@@ -106,14 +111,28 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
 
         $phrases = $this->relational;
 
+        $firstPhrase = $phrases->findOneRandom();
+        $this->assertInstanceOf(
+            Phrase::class,
+            $firstPhrase,
+            'Every phrase should be a entity'
+        );
         $this->assertContains(
-            $firstPhrase = $phrases->findOneRandom(),
-            $list
+            $firstPhrase->getTitle(),
+            $this->existingTitles,
+            'First phrase should be on the list of phrases in the persistance storage.'
         );
 
+        $secondPhrase = $phrases->findOneRandom();
+        $this->assertInstanceOf(
+            Phrase::class,
+            $secondPhrase,
+            'Every phrase should be a entity'
+        );
         $this->assertContains(
-            $secondPhrase = $phrases->findOneRandom(),
-            $list
+            $secondPhrase->getTitle(),
+            $this->existingTitles,
+            'Second phrase should be on the list of phrases in the persistance storage.'
         );
         $this->assertNotEquals(
             $firstPhrase,
@@ -129,7 +148,7 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
     {
         $phrases = $this->relational;
 
-        $id = $phrases->save($this->relationalProvider[0]);
+        $id = $phrases->save($this->relationalEntityPhraseProvider[0]);
         $this->assertEquals(
             1,
             $id,
