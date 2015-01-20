@@ -49,7 +49,7 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
         $phrases = $this->relational;
 
         $this->assertInstanceOf(
-            'Phrases\Persistance\RepositoryInterface',
+            RepositoryInterface::class,
             $phrases
         );
         $this->assertEquals(
@@ -137,4 +137,3 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
         );
     }
 }
-
