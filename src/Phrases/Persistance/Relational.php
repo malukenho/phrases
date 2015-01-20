@@ -36,8 +36,6 @@ abstract class Relational implements RepositoryInterface
         return $this->pdoInstance;
     }
 
-
-
     final public function findOneRandom()
     {
         $findOneStatement = $this->createFindOneRandomStatement();
