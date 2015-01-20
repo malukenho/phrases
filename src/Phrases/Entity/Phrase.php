@@ -2,6 +2,8 @@
 
 namespace Phrases\Entity;
 
+use Cocur\Slugify\Slugify;
+
 class Phrase
 {
     protected $title;
@@ -21,5 +23,10 @@ class Phrase
     public function getText()
     {
         return $this->text;
+    }
+
+    public function getSlug()
+    {
+        return '/' . (new Slugify())->slugify($this->getTitle());
     }
 }
