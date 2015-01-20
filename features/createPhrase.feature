@@ -1,4 +1,4 @@
-Feature: akasdaks
+Feature: Create phrase by post
 
   Scenario: Succesful create a new feature
     Given a phrase "Lorem Ipsum"
