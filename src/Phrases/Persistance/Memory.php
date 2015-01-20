@@ -2,19 +2,29 @@
 
 namespace Phrases\Persistance;
 
+use Phrases\Entity\Phrase;
+
 class Memory implements RepositoryInterface
 {
-    protected $list = array();
+    protected $list = [];
 
     public function __construct(array $list)
     {
+        foreach ($list as $phrase) {
+            if ($phrase instanceof Phrase) {
+                continue;
+            }
+
+            $message = 'Phrase list should contain only Phrase entities.';
+            throw new \InvalidArgumentException($message);
+        }
         $this->list = $list;
     }
 
     public function findOneRandom()
     {
         if (empty($this->list)) {
-            return array();
+            return [];
         }
 
         $keys = array_keys($this->list);
@@ -25,8 +35,9 @@ class Memory implements RepositoryInterface
         return $this->list[$random];
     }
 
-    public function save(array $phrase)
+    public function save(Phrase $phrase)
     {
-        $this->list[] = $phrase;
+        return $this->list[] = $phrase;
     }
 }
+

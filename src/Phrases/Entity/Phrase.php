@@ -11,8 +11,16 @@ class Phrase
 
     public function __construct($title, $text)
     {
-        $this->title = $title;
-        $this->text  = $text;
+        $this->title = trim($title);
+        $this->text  = trim($text);
+
+        if (empty($this->title)) {
+            throw new InvalidArgumentException('Title empty not valid');
+        }
+
+        if (empty($this->text)) {
+            throw new InvalidArgumentException('Text empty not valid');
+        }
     }
 
     public function getTitle()

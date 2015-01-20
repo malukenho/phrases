@@ -2,8 +2,10 @@
 
 namespace Phrases\Persistance;
 
+use Phrases\Entity\Phrase;
+
 interface RepositoryInterface
 {
     public function findOneRandom();
-    public function save(array $phrase);
+    public function save(Phrase $phrase);
 }
