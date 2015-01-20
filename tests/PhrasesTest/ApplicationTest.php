@@ -31,7 +31,6 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     public function testGetPhraseAsPlainText()
     {
         $request = new Request;
-        $header = new Headers;
         $request->setMethod('GET');
         $request->setUri('http://localhost/');
         $request->setHeaders(Headers::fromString('Accept: plain/text'));
@@ -55,7 +54,6 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     public function testPostNewPhrase()
     {
         $request = new Request;
-        $header = new Headers;
         $parameters = new Parameters([
             'title' => 'É nóis que voa bruxão',
             'text'  => 'hehe'
