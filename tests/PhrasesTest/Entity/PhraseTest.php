@@ -4,73 +4,35 @@ namespace Phrases\Entity;
 
 class PhraseTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    /**
+    * @expectedException PHPUnit_Framework_Error
+    */
+    public function testInstantiationWithoutArgumentsShouldNotWork()
     {
-        $this->phrase = new Phrase;
+        $phrase = new Phrase();
     }
 
-    public function testSetTitleWithValidDataShouldWork()
+    public function testInstantiationOfAPhraseIsCompositeWithTitleAndText()
     {
         $title  = 'Eu só acho';
-        $phrase = $this->phrase;
-
-        $return = $phrase->setTitle($title);
-
-        $this->assertEquals($return, $phrase);
-        $this->assertAttributeEquals($title, 'title', $phrase);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Title empty not valid
-     */
-    public function testSetTitleWithInvalidDataDontWork()
-    {
-        $title = null;
-        $phrase = $this->phrase;
-
-        $phrase->setTitle($title);
-    }
-
-    public function testShouldSetAndGetTheTitle()
-    {
-        $title = 'Hoje até que rendeu legal';
-        $phrase = $this->phrase;
-        $phrase->setTitle($title);
-
-        $this->assertEquals($title, $phrase->getTitle());
-    }
-
-    public function testSetTextWithValidDataShouldWork()
-    {
         $text  = 'Eu só acho que eu deveria codar mais =/';
-        $phrase = $this->phrase;
 
-        $return = $phrase->setText($text);
+        $phrase = new Phrase($title, $text);
 
-        $this->assertEquals($return, $phrase);
+        $this->assertAttributeEquals($title, 'title', $phrase);
         $this->assertAttributeEquals($text, 'text', $phrase);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Text empty not valid
-     */
-    public function testSetTextWithInvalidDataDontWork()
+    public function testShouldGetTheTitleAndText()
     {
-        $text = null;
-        $phrase = $this->phrase;
-
-        $phrase->setText($text);
-    }
-
-    public function testShouldSetAndGetTheText()
-    {
+        $title = 'Hoje até que rendeu legal';
         $text = 'Acho que pode rolar mais vezes, pois rende bastante, assim não fica só nas costas do Augusto';
-        $phrase = $this->phrase;
-        $phrase->setText($text);
 
+        $phrase = new Phrase($title, $text);
+
+        $this->assertEquals($title, $phrase->getTitle());
         $this->assertEquals($text, $phrase->getText());
     }
+
 }
 
