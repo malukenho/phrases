@@ -5,7 +5,7 @@ namespace Phrases\Persistence;
 class SQLite extends Relational
 {
     /**
-     * @return PDOStatement
+     * @return \PDOStatement
      */
     protected function createFindOneRandomStatement()
     {
@@ -16,7 +16,7 @@ class SQLite extends Relational
     }
 
     /**
-     * @return PDOStatement
+     * @return \PDOStatement
      */
     protected function createInsertStatement()
     {
