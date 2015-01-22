@@ -37,7 +37,9 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->pdo->exec('DROP TABLE phrases');
+        if ($this->pdo instanceof Pdo) {
+            $this->pdo->exec('DROP TABLE phrases');
+        }
     }
 
     private function populatePhrasesTable(array $list)
