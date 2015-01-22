@@ -10,17 +10,16 @@ class PhrasesRepository
 
     protected static function fromArray(array $dataCollection)
     {
-        $phrasePrototype = new Phrase();
         $repository = new Repository();
 
-        foreach ($dataCollection as $singleData) {
-            $phrase = clone $phrasePrototype;
-
-            $phrase->setTitle($singleData['title'])
-                ->setText($singleData['text']);
-
-            $repository->attach($phrase);
-        }
+        array_map(function ($phraseData) use ($repository) {
+            $repository->attach(
+                new Phrase(
+                    $phraseData['title'],
+                    $phraseData['text']
+                )
+            );
+        }, $dataCollection);
 
         return $repository;
     }
