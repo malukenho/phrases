@@ -15,7 +15,7 @@ class MySQLTest extends AbstractRelationalTestCase
     protected function createPersistenceAdapter()
     {
         $username = 'root';
-        $password = (getenv('CONTINOUS_INTEGRATION') == 'true') ? '' : 'root';
+        $password = (getenv('CONTINUOUS_INTEGRATION') == 'true') ? '' : 'root';
         $pdo = new Pdo('mysql:host=localhost', $username, $password);
         $pdo->exec('CREATE DATABASE IF NOT EXISTS phrases_test');
         unset($pdo);
