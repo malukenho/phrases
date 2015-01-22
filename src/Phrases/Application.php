@@ -1,7 +1,7 @@
 <?php
+
 namespace Phrases;
 
-use Phrases\Http\Response\Sender;
 use Phrases\Http\Response\Type;
 use Phrases\Persistence\RepositoryInterface;
 use Zend\Stdlib\RequestInterface;
@@ -9,8 +9,6 @@ use Zend\Http\PhpEnvironment\Request as EnvRequest;
 use Zend\Http\Headers;
 use Zend\Http\Response;
 use Zend\Http\Request;
-use Phrases\Http\Response\CreateResponse;
-use Phrases\Persistence;
 
 class Application
 {
@@ -53,6 +51,9 @@ class Application
 
     /**
      * @TODO: Extract method
+     *
+     * @param Request $request
+     * @param string  $defaultAccept
      */
     private function ensureAcceptHeaderExistsOnRequest(Request $request, $defaultAccept = 'plain/text')
     {
@@ -66,6 +67,11 @@ class Application
 
     /**
      * @TODO: Extract method.
+     *
+     * @param Request  $request
+     * @param Response $response
+     *
+     * @return Response
      */
     private function serializeControllerResponse(Request $request, Response $response)
     {
