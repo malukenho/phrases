@@ -4,7 +4,7 @@ namespace Phrases\Controller;
 
 use Zend\Http\Headers;
 use Zend\Http\Response;
-use Phrases\Persistance\Memory;
+use Phrases\Persistence\Memory;
 use Phrases\Entity\Phrase;
 
 /**

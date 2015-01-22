@@ -3,13 +3,13 @@
 namespace Phrases\Controller;
 
 use Zend\Http\Request;
-use Phrases\Persistance;
+use Phrases\Persistence;
 
 class Factory
 {
     private $constructorArgs = null;
 
-    public function __construct(Persistance\RepositoryInterface $phrases)
+    public function __construct(Persistence\RepositoryInterface $phrases)
     {
         $this->constructorArgs = $phrases;
     }

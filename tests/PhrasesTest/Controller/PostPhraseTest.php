@@ -3,7 +3,7 @@
 namespace Phrases\Controller;
 
 use Zend\Http\Headers;
-use Phrases\Persistance\RepositoryInterface;
+use Phrases\Persistence\RepositoryInterface;
 
 class PostPhraseTest extends \PHPUnit_Framework_TestCase
 {

@@ -41,12 +41,7 @@ abstract class Relational implements RepositoryInterface
     {
         $findOneStatement = $this->createFindOneRandomStatement();
         $findOneStatement->execute();
-        $findOneStatement->setFetchMode(
-            PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE,
-            Phrase::class,
-            ['temp_title', 'temp_text']
-        );
-
+        $findOneStatement->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, Phrase::class, ['temp_title', 'temp_text']);
         $onePhrase = $findOneStatement->fetch();
         if (empty($onePhrase)) {
             return [];
