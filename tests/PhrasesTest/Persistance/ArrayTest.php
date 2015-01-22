@@ -98,7 +98,8 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
         $phraseList = [
             ['title' => 'Its a phrase.']
         ];
-        $phrases = new Memory($phraseList);
+
+        new Memory($phraseList);
     }
 }
 
