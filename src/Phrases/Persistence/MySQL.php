@@ -1,6 +1,6 @@
 <?php
 
-namespace Phrases\Persistance;
+namespace Phrases\Persistence;
 
 class MySQL extends SQLite
 {

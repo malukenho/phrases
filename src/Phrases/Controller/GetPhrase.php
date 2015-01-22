@@ -4,7 +4,7 @@ namespace Phrases\Controller;
 
 use Zend\Http\Request;
 use Zend\Http\Response;
-use Phrases\Persistance\RepositoryInterface;
+use Phrases\Persistence\RepositoryInterface;
 
 class GetPhrase implements ExecutionInterface
 {

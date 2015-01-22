@@ -1,6 +1,6 @@
 <?php
 
-namespace Phrases\Persistance;
+namespace Phrases\Persistence;
 
 use Phrases\Entity\Phrase;
 use PhrasesTestAsset\ConsumedData;

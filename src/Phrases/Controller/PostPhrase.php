@@ -3,7 +3,7 @@
 namespace Phrases\Controller;
 
 use Phrases\Entity\Phrase;
-use Phrases\Persistance\RepositoryInterface;
+use Phrases\Persistence\RepositoryInterface;
 use Zend\Http\Response;
 use Zend\Http\Request;
 

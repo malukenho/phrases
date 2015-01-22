@@ -2,7 +2,7 @@
 namespace PhrasesTest;
 
 use Phrases\Application;
-use Phrases\Persistance\Memory;
+use Phrases\Persistence\Memory;
 use PHPUnit_Framework_TestCase;
 use PhrasesTestAsset\ConsumedData;
 use Zend\Http\Request;

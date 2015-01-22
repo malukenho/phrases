@@ -1,5 +1,5 @@
 <?php
-namespace Phrases\Persistance;
+namespace Phrases\Persistence;
 
 use Pdo;
 use Phrases\Entity\Phrase;
@@ -13,14 +13,14 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
     protected $pdo;
 
     /**
-     * @var \Phrases\Persistance\Relational
+     * @var \Phrases\Persistence\Relational
      */
     protected $relational;
     protected $existingTitles = [];
 
     protected function setUp()
     {
-        $this->createPersistanceAdapter();
+        $this->createPersistenceAdapter();
         $this->assertNotEmpty($this->pdo, 'Please, set up a pdo instance on the test case.');
         $this->assertNotEmpty($this->relational, 'Please, set up a relational adapter on the test case.');
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -33,7 +33,7 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
         }
     }
 
-    abstract protected function createPersistanceAdapter();
+    abstract protected function createPersistenceAdapter();
 
     protected function tearDown()
     {

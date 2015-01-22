@@ -11,7 +11,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->persistance = $this->getMock('Phrases\Persistance\RepositoryInterface');
+        $this->persistance = $this->getMock('Phrases\Persistence\RepositoryInterface');
     }
 
     public function testCreateControllerForGetHttpMethod()

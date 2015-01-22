@@ -3,14 +3,14 @@ namespace Phrases;
 
 use Phrases\Http\Response\Sender;
 use Phrases\Http\Response\Type;
-use Phrases\Persistance\RepositoryInterface;
+use Phrases\Persistence\RepositoryInterface;
 use Zend\Stdlib\RequestInterface;
 use Zend\Http\PhpEnvironment\Request as EnvRequest;
 use Zend\Http\Headers;
 use Zend\Http\Response;
 use Zend\Http\Request;
 use Phrases\Http\Response\CreateResponse;
-use Phrases\Persistance;
+use Phrases\Persistence;
 
 class Application
 {

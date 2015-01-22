@@ -1,6 +1,6 @@
 <?php
 
-namespace Phrases\Persistance;
+namespace Phrases\Persistence;
 
 require_once 'AbstractRelationalTestCase.php';
 
@@ -12,7 +12,7 @@ class MySQLTest extends AbstractRelationalTestCase
      * @TODO Remove database provisioning from here.
      * @TODO Move database connection options to environment variables.
      */
-    protected function createPersistanceAdapter()
+    protected function createPersistenceAdapter()
     {
         $username = 'root';
         $password = (getenv('CONTINOUS_INTEGRATION') == 'true') ? '' : 'root';
