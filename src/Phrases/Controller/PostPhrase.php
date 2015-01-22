@@ -52,7 +52,7 @@ class PostPhrase implements ExecutionInterface
      *
      * @param Request $request
      *
-     * @return Zend\Http\Response|Response
+     * @return Response
      */
     public function execute(Request $request)
     {
