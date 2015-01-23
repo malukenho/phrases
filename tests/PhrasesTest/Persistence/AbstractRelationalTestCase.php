@@ -136,11 +136,6 @@ abstract class AbstractRelationalTestCase extends \PHPUnit_Framework_TestCase
             $this->existingTitles,
             'Second phrase should be on the list of phrases in the persistance storage.'
         );
-        $this->assertNotEquals(
-            $firstPhrase,
-            $secondPhrase,
-            'A random algorithm should be working. Maybe it is.'
-        );
     }
 
     /**
