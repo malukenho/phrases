@@ -1,4 +1,5 @@
 <?php
+
 namespace Phrases\Http\Response;
 
 use Zend\Http\Response;
@@ -26,6 +27,9 @@ abstract class AbstractResponse
 
     /**
      * Try to call a successor if has been setted.
+     *
+     * @param Request  $request
+     * @param Response $response
      *
      * @return void|mixed
      */
@@ -58,7 +62,7 @@ abstract class AbstractResponse
     }
 
     /**
-     * Check if an object has a sucessor
+     * Check if an object has a successor.
      *
      * @return boolean
      */
@@ -70,6 +74,9 @@ abstract class AbstractResponse
     /**
      * Try response a Request, If not possible call another object
      * of can do it.
+     *
+     * @param Request  $request
+     * @param Response $response
      *
      * @return \Zend\Http\Response
      */
@@ -101,6 +108,8 @@ abstract class AbstractResponse
      *      return $response;
      * </code>
      *
+     * @param Response $response
+     *
      * @return \Zend\Http\Response
      */
     abstract public function serialize(Response $response);
@@ -114,6 +123,8 @@ abstract class AbstractResponse
      * <code>
      *      return $this->accept->hasMediaType('json');
      * </code>
+     *
+     * @param Request $request
      *
      * @return boolean
      */
