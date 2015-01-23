@@ -59,18 +59,13 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
         $phrases = new Memory($list);
 
         $this->assertContains(
-            $firstPhrase = $phrases->findOneRandom(),
+            $phrases->findOneRandom(),
             $list
         );
 
         $this->assertContains(
-            $secondPhrase = $phrases->findOneRandom(),
+            $phrases->findOneRandom(),
             $list
-        );
-        $this->assertNotEquals(
-            $firstPhrase,
-            $secondPhrase,
-            'A random algorithm should be working. Maybe it is.'
         );
     }
 
@@ -98,8 +93,7 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
         $phraseList = [
             ['title' => 'Its a phrase.']
         ];
-
-        new Memory($phraseList);
+        $phrases = new Memory($phraseList);
     }
 }
 
