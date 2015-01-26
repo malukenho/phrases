@@ -15,6 +15,9 @@ class GetPhrase implements ExecutionInterface
         $this->currentPhrases = $existingPhrases;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function execute(Request $request)
     {
         $phrase = $this->currentPhrases->findOneRandom();
