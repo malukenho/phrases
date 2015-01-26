@@ -7,12 +7,12 @@ use Zend\Http;
 class Error implements ExecutionInterface
 {
     /**
-     * @var integer represents a http status code
+     * @var integer represents a http status code.
      */
     private $statusCode;
 
     /**
-     * @var string represents a message of http response
+     * @var string represents a message of http response.
      */
     private $statusMessage;
 
@@ -29,9 +29,7 @@ class Error implements ExecutionInterface
     }
 
     /**
-     * @param Http\Request $request
-     *
-     * @return Zend\Http\Response|Http\Response
+     * {@inheritDoc}
      */
     public function execute(Http\Request $request)
     {

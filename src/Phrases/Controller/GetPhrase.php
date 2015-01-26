@@ -8,8 +8,16 @@ use Phrases\Persistence\RepositoryInterface;
 
 class GetPhrase implements ExecutionInterface
 {
+    /**
+     * @var RepositoryInterface
+     */
     private $currentPhrases;
 
+    /**
+     * Constructor.
+     *
+     * @param RepositoryInterface $existingPhrases
+     */
     public function __construct(RepositoryInterface $existingPhrases)
     {
         $this->currentPhrases = $existingPhrases;
