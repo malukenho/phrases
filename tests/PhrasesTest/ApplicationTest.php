@@ -1,14 +1,13 @@
 <?php
 namespace PhrasesTest;
 
+use Pdo;
+use Zend\Http\Request;
+use Zend\Http\Headers;
 use Phrases\Application;
 use Phrases\Persistence\MySQL;
 use PHPUnit_Framework_TestCase;
 use PhrasesTestAsset\ConsumedData;
-use Zend\Http\Request;
-use Zend\Http\Headers;
-use Zend\StdLib\Parameters;
-use Phrases\Entity\Phrase;
 
 /**
  * @huge
