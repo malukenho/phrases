@@ -5,11 +5,11 @@ namespace Phrases\Entity;
 class PhraseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * @expectedException \InvalidArgumentException
      */
     public function testInstantiationWithoutArgumentsShouldNotWork()
     {
-        $phrase = new Phrase();
+        new Phrase(null, null);
     }
 
     public function testInstantiationOfAPhraseIsCompositeWithTitleAndText()
