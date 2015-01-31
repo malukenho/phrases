@@ -27,17 +27,20 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $pdo = $this->pdo = new \PDO('mysql:hostname=localhost;dbname=phrases_test', 'root', 'root');
+        $username = 'root';
+        $password = (getenv('CONTINUOUS_INTEGRATION') == 'true') ? '' : 'root';
+        $this->pdo = new Pdo('mysql:host=localhost', $username, $password);
+
         $sql = 'CREATE TABLE IF NOT EXISTS phrases (
             id INTEGER(11) PRIMARY KEY AUTO_INCREMENT,
             title VARCHAR(255) NOT NULL UNIQUE,
             text TEXT NOT NULL
         ) Engine=InnoDB';
 
-        $pdo->exec($sql);
-        $this->populatePhrasesTable($pdo, ConsumedData::asRelationalArray()[0]);
+        $this->pdo->exec($sql);
+        $this->populatePhrasesTable($this->pdo, ConsumedData::asRelationalArray()[0]);
 
-        $this->persistence = new MySQL($pdo);
+        $this->persistence = new MySQL($this->pdo);
         $this->application = new Application($this->persistence);
     }
 
