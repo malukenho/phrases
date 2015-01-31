@@ -30,8 +30,11 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     {
         $username = 'root';
         $password = (getenv('CONTINUOUS_INTEGRATION') == 'true') ? '' : 'root';
-        $this->pdo = new Pdo('mysql:host=localhost;dbname=phrases_test', $username, $password);
+        $pdo = new Pdo('mysql:host=localhost', $username, $password);
+        $pdo->exec('CREATE DATABASE IF NOT EXISTS phrases_test');
+        unset($pdo);
 
+        $this->pdo = new Pdo('mysql:host=localhost;dbname=phrases_test', $username, $password);
         $sql = 'CREATE TABLE IF NOT EXISTS phrases (
             id INTEGER(11) PRIMARY KEY AUTO_INCREMENT,
             title VARCHAR(255) NOT NULL UNIQUE,
