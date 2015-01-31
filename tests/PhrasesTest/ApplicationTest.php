@@ -19,11 +19,11 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
      * @var Application
      */
     private $application;
-    private $persistence;
     /**
      * @var \PDO
      */
     private $pdo;
+    private $persistence;
 
     public function setUp()
     {
