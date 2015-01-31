@@ -2,7 +2,7 @@
 namespace PhrasesTest;
 
 use Phrases\Application;
-use Phrases\Persistence\Memory;
+use Phrases\Persistence\MySQL;
 use PHPUnit_Framework_TestCase;
 use PhrasesTestAsset\ConsumedData;
 use Zend\Http\Request;
@@ -19,14 +19,43 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
      * @var Application
      */
     private $application;
-    private $persistance;
+    private $persistence;
+    /**
+     * @var \PDO
+     */
+    private $pdo;
 
     public function setUp()
     {
-        $phrases = ConsumedData::asRelationalArray()[0];
-        $onePhrase = new Phrase($phrases['title'], $phrases['text']);
-        $this->persistance = new Memory([$onePhrase]);
-        $this->application = new Application($this->persistance);
+        $pdo = $this->pdo = new \PDO('mysql:hostname=localhost;dbname=phrases_test', 'root', 'root');
+        $sql = 'CREATE TABLE IF NOT EXISTS phrases (
+            id INTEGER(11) PRIMARY KEY AUTO_INCREMENT,
+            title VARCHAR(255) NOT NULL UNIQUE,
+            text TEXT NOT NULL
+        ) Engine=InnoDB';
+
+        $pdo->exec($sql);
+        $this->populatePhrasesTable($pdo, ConsumedData::asRelationalArray()[0]);
+
+        $this->persistence = new MySQL($pdo);
+        $this->application = new Application($this->persistence);
+    }
+
+    public function tearDown()
+    {
+        $this->pdo
+            ->exec('DELETE FROM phrases');
+    }
+
+    private function populatePhrasesTable(\Pdo $pdo, array $list)
+    {
+        $stm = $pdo
+            ->prepare('INSERT INTO phrases(title, text) VALUES(:title, :text);');
+
+        $stm->bindValue(':title', $list['title'], \Pdo::PARAM_STR);
+        $stm->bindValue(':text',  $list['text'],  \Pdo::PARAM_STR);
+
+        $stm->execute();
     }
 
     public function testGetPhraseAsPlainText()
@@ -35,7 +64,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $request->setMethod('GET');
         $request->setUri('http://localhost/');
         $request->setHeaders(Headers::fromString('Accept: plain/text'));
-        $app = new Application($this->persistance, $request);
+        $app = new Application($this->persistence, $request);
         $response = $app->fetchResponse();
         $this->assertInstanceOf(
             'Zend\Http\Response',
@@ -62,7 +91,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $request->setMethod('POST');
         $request->setUri('http://localhost/');
         $request->setPost($parameters);
-        $app = new Application($this->persistance, $request);
+        $app = new Application($this->persistence, $request);
         $response = $app->fetchResponse();
         $this->assertInstanceOf(
             'Zend\Http\Response',
