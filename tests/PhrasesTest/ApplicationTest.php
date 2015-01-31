@@ -5,6 +5,8 @@ use Pdo;
 use Zend\Http\Request;
 use Zend\Http\Headers;
 use Phrases\Application;
+use Phrases\Entity\Phrase;
+use Zend\StdLib\Parameters;
 use Phrases\Persistence\MySQL;
 use PHPUnit_Framework_TestCase;
 use PhrasesTestAsset\ConsumedData;
@@ -28,7 +30,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     {
         $username = 'root';
         $password = (getenv('CONTINUOUS_INTEGRATION') == 'true') ? '' : 'root';
-        $this->pdo = new Pdo('mysql:host=localhost', $username, $password);
+        $this->pdo = new Pdo('mysql:host=localhost;dbname=phrases_test', $username, $password);
 
         $sql = 'CREATE TABLE IF NOT EXISTS phrases (
             id INTEGER(11) PRIMARY KEY AUTO_INCREMENT,
@@ -49,13 +51,13 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
             ->exec('DELETE FROM phrases');
     }
 
-    private function populatePhrasesTable(\Pdo $pdo, array $list)
+    private function populatePhrasesTable(Pdo $pdo, array $list)
     {
         $stm = $pdo
             ->prepare('INSERT INTO phrases(title, text) VALUES(:title, :text);');
 
-        $stm->bindValue(':title', $list['title'], \Pdo::PARAM_STR);
-        $stm->bindValue(':text',  $list['text'],  \Pdo::PARAM_STR);
+        $stm->bindValue(':title', $list['title'], Pdo::PARAM_STR);
+        $stm->bindValue(':text',  $list['text'],  Pdo::PARAM_STR);
 
         $stm->execute();
     }
