@@ -3,6 +3,7 @@
 namespace Phrases\Entity;
 
 use Cocur\Slugify\Slugify;
+use InvalidArgumentException;
 
 class Phrase
 {
