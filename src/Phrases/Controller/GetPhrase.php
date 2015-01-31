@@ -4,6 +4,7 @@ namespace Phrases\Controller;
 
 use Zend\Http\Request;
 use Zend\Http\Response;
+use Phrases\Entity\Phrase;
 use Phrases\Persistence\RepositoryInterface;
 
 class GetPhrase implements ExecutionInterface
@@ -30,6 +31,10 @@ class GetPhrase implements ExecutionInterface
     {
         $phrase = $this->currentPhrases->findOneRandom();
         $response = new Response;
+
+        if (! $phrase instanceof Phrase) {
+            return $response;
+        }
         $response->setContent($phrase->getText());
 
         return $response;
