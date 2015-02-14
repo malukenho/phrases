@@ -1,6 +1,7 @@
 <?php
 namespace PhrasesTest;
 
+<<<<<<< HEAD
 use Pdo;
 use Zend\Http\Request;
 use Zend\Http\Headers;
@@ -14,12 +15,19 @@ use PhrasesTestAsset\ConsumedData;
 /**
  * @huge
  */
+=======
+use Phrases\Application;
+use PHPUnit_Framework_TestCase;
+use PhrasesTestAsset\ConsumedData;
+
+>>>>>>> master
 class ApplicationTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Application
      */
     private $application;
+<<<<<<< HEAD
     /**
      * @var \PDO
      */
@@ -114,5 +122,24 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
             $response->getBody(),
             'Expected URL of created Phrase'
         );
+=======
+
+    public function setUp()
+    {
+        $this->application = new Application(ConsumedData::asArray());
+    }
+
+    public function testApplicationCanStorageThePhrases()
+    {
+        $this->assertEquals(ConsumedData::asArray(), $this->application->getPhrases());
+    }
+
+    public function testApplicationReturnOnePhrase()
+    {
+        $phrase = $this->application->getPhrase();
+        $consumedData = ConsumedData::asArray();
+
+        $this->assertEquals($consumedData[0], $phrase);
+>>>>>>> master
     }
 }
