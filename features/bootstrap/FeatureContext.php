@@ -21,11 +21,8 @@ class FeatureContext implements Context, SnippetAcceptingContext
      * @var Request
      */
     private $request;
-<<<<<<< HEAD
     private $phrase;
     private $statusCode;
-=======
->>>>>>> master
 
     /**
      * @Given a new Request object
@@ -64,7 +61,6 @@ EOB;
     {
         /** @var $response Zend\Http\Response */
         $response = $this->application->fetchResponse();
-<<<<<<< HEAD
         $response->getBody();
     }
 
@@ -111,8 +107,5 @@ EOB;
                 sprintf('Expected status code %s received %s', $statusCode, $this->statusCode)
             );
         }
-=======
-        return '[Jack Makiyama]' == $response->getBody();
->>>>>>> master
     }
 }
