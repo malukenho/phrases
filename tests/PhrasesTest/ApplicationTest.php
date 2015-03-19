@@ -35,17 +35,11 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         unset($pdo);
 
         $this->pdo = new Pdo('mysql:host=localhost;dbname=phrases_test', $username, $password);
-        $sql = 'CREATE TABLE IF NOT EXISTS phrases (
-            id INTEGER(11) PRIMARY KEY AUTO_INCREMENT,
-            title VARCHAR(255) NOT NULL UNIQUE,
-            text TEXT NOT NULL
-        ) Engine=InnoDB';
-
-        $this->pdo->exec($sql);
-        $this->populatePhrasesTable($this->pdo, ConsumedData::asRelationalArray()[0]);
-
         $this->persistence = new MySQL($this->pdo);
         $this->application = new Application($this->persistence);
+
+        $this->persistence->createTables();
+        $this->populatePhrasesTable($this->pdo, ConsumedData::asRelationalArray()[0]);
     }
 
     public function tearDown()
