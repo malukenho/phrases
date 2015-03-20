@@ -1,4 +1,4 @@
-Feature: Create phrase by post
+Feature: Creating a new Phrase via POST
 
   Scenario: Succesful create a new feature
     Given a phrase "Lorem Ipsum"
