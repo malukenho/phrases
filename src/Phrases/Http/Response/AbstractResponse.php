@@ -1,7 +1,9 @@
 <?php
+
 namespace Phrases\Http\Response;
 
 use Zend\Http\Response;
+use Zend\Http\Request;
 use Zend\Http\Header\Accept;
 
 /**
@@ -11,16 +13,6 @@ use Zend\Http\Header\Accept;
  */
 abstract class AbstractResponse
 {
-    /**
-     * @var Accept
-     */
-    protected $accept;
-
-    /**
-     * @var string
-     */
-    protected $phrase;
-
     /**
      * @var self
      */
@@ -34,26 +26,17 @@ abstract class AbstractResponse
     private $isHandled = false;
 
     /**
-     * Constructor.
-     *
-     * @param Accept $accept
-     * @param string $phrase Data to show on response
-     */
-    public function __construct(Accept $accept, $phrase)
-    {
-        $this->accept = $accept;
-        $this->phrase = $phrase;
-    }
-
-    /**
      * Try to call a successor if has been setted.
+     *
+     * @param Request  $request
+     * @param Response $response
      *
      * @return void|mixed
      */
-    private function callSuccessor()
+    private function callSuccessor(Request $request, Response $response)
     {
         if ($this->hasSuccessor()) {
-            return $this->objectSuccessor->handlerResponse();
+            return $this->objectSuccessor->handlerResponse($request, $response);
         }
     }
 
@@ -63,7 +46,7 @@ abstract class AbstractResponse
      *
      * @param AbstractResponse $responseObject
      */
-    final public function setSuccessor(AbstractResponse $responseObject)
+    public function setSuccessor(AbstractResponse $responseObject)
     {
         $this->objectSuccessor = $responseObject;
     }
@@ -79,7 +62,7 @@ abstract class AbstractResponse
     }
 
     /**
-     * Check if an object has a sucessor
+     * Check if an object has a successor.
      *
      * @return boolean
      */
@@ -92,37 +75,44 @@ abstract class AbstractResponse
      * Try response a Request, If not possible call another object
      * of can do it.
      *
-     * @return mixed
+     * @param Request  $request
+     * @param Response $response
+     *
+     * @return \Zend\Http\Response
      */
-    public function handlerResponse()
+    final public function handlerResponse(Request $request, Response $response)
     {
-        if (! $this->isHandled && $this->canResolve()) {
-            $this->markRequestAsHandled();
-            return $this->response();
+        if ($this->isHandled) {
+            return $response;
         }
 
-        return $this->callSuccessor();
+        if (! $this->canResolve($request)) {
+            $this->markRequestAsHandled();
+            return $this->serialize($response);
+        }
+
+        return $this->callSuccessor($request, $response);
     }
 
     /**
      * Create and return an object of can Response this request.
      *
      * Code example:
-     *
      * <code>
-     *      $response = new Response();
-     *      $response->setStatusCode(Response::STATUS_CODE_200);
-     *      $response->setContent($this->phrase);
+     *      $contentToSerialize = $response->getContent();
      *      $response->getHeaders()->addHeaders([
-     *          'Content-Type' => 'text/plain'
+     *          'Content-Type' => 'application/json'
      *      ]);
+     *      $response->setContent(json_encode($contentToSerialize));
      *
      *      return $response;
      * </code>
      *
-     * @return Response
+     * @param Response $response
+     *
+     * @return \Zend\Http\Response
      */
-    abstract public function response();
+    abstract public function serialize(Response $response);
 
     /**
      * Need to return a boolean value if request can be resolved by
@@ -134,7 +124,9 @@ abstract class AbstractResponse
      *      return $this->accept->hasMediaType('json');
      * </code>
      *
+     * @param Request $request
+     *
      * @return boolean
      */
-    abstract public function canResolve();
+    abstract public function canResolve(Request $request);
 }
