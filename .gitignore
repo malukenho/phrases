@@ -1,5 +1,4 @@
 vendor/
 .vagrant/
-composer.lock
 phpunit.xml
 composer.phar
