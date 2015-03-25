@@ -33,6 +33,6 @@ class Html extends AbstractResponse
     {
         $accept = $request->getHeaders()->get('Accept');
 
-        return $accept->hasMediaType('plain') || $accept->hasMediaType('text/html');
+        return $accept->hasMediaType('html') || $accept->hasMediaType('text/html');
     }
 }
