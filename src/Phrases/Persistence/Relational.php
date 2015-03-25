@@ -3,6 +3,7 @@
 namespace Phrases\Persistence;
 
 use PDO;
+use PDOStatement;
 use Phrases\Entity\Phrase;
 
 abstract class Relational implements RepositoryInterface

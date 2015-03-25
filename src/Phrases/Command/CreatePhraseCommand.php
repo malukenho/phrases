@@ -15,22 +15,24 @@
  * This software consists of voluntary contributions made by many individuals
  * and is licensed under the MIT license.
  */
-namespace Phrases\Entity;
+namespace Phrases\Command;
 
-use Cocur\Slugify\Slugify;
-use InvalidArgumentException;
+use Rhumsaa\Uuid\Uuid;
 
-class Phrase
+class CreatePhraseCommand
 {
     /**
      * @var string
      */
-    protected $title;
-
+    private $identifier;
     /**
      * @var string
      */
-    protected $text;
+    private $title;
+    /**
+     * @var string
+     */
+    private $text;
 
     /**
      * Constructor.
@@ -40,14 +42,17 @@ class Phrase
      */
     public function __construct($title, $text)
     {
-        $this->title = trim($title);
-        $this->text  = trim($text);
+        $this->identifier = Uuid::uuid4();
+        $this->title = $title;
+        $this->text = $text;
+    }
 
-        if (empty($this->title) || empty($this->text)) {
-            throw new InvalidArgumentException(
-                'The "title" and "text" params cannot be null.'
-            );
-        }
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
     }
 
     /**
@@ -64,13 +69,5 @@ class Phrase
     public function getText()
     {
         return $this->text;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSlug()
-    {
-        return (new Slugify())->slugify($this->title);
     }
 }

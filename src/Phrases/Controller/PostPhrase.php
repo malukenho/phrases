@@ -2,7 +2,8 @@
 
 namespace Phrases\Controller;
 
-use Phrases\Entity\Phrase;
+use Phrases\Command\CommandBus;
+use Phrases\Command\CreatePhraseCommand;
 use Phrases\Persistence\RepositoryInterface;
 use Zend\Http\Response;
 use Zend\Http\Request;
@@ -15,35 +16,27 @@ class PostPhrase implements ExecutionInterface
     protected $repository;
 
     /**
-     * @var string[]
+     * @var CreatePhraseCommand
      */
-    protected $data;
+    protected $command;
+
+    /**
+     * @var CommandBus
+     */
+    protected $commandBus;
 
     /**
      * Constructor.
      *
      * @param RepositoryInterface $repository to save phrases when we want to storage a new.
-     * @param array               $postData   with correct data do be stored.
+     * @param CommandBus          $commandBus responsible to handle commands
+     * @param string[]            $data       with correct data do be stored.
      */
-    public function __construct(RepositoryInterface $repository, array $postData)
+    public function __construct(RepositoryInterface $repository, CommandBus $commandBus, array $data)
     {
         $this->repository = $repository;
-        $this->data       = $postData;
-    }
-
-    /**
-     * Verify if a post data is valid.
-     *
-     * @return bool
-     */
-    protected function isValidPostData()
-    {
-        $mandatoryKeys = [
-            'title',
-            'text'
-        ];
-
-        return !array_diff($mandatoryKeys, array_keys($this->data));
+        $this->commandBus = $commandBus;
+        $this->command    = new CreatePhraseCommand($data['title'], $data['text']);
     }
 
     /**
@@ -51,15 +44,6 @@ class PostPhrase implements ExecutionInterface
      */
     public function execute(Request $request)
     {
-        $response = new Response();
-
-        if ($this->isValidPostData()) {
-            $entity = new Phrase($this->data['title'], $this->data['text']);
-            $this->repository->save($entity);
-            $response->setContent($entity->getSlug());
-            return $response->setStatusCode(Response::STATUS_CODE_201);
-        }
-
-        return $response->setStatusCode(Response::STATUS_CODE_400);
+        return $this->commandBus->push($this->command, $this->repository);
     }
 }
