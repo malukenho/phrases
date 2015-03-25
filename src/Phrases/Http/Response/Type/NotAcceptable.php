@@ -11,6 +11,7 @@ class NotAcceptable extends AbstractResponse
     {
         $response->setStatusCode(406);
         $response->setReasonPhrase('Not acceptable');
+        $response->setContent('Wrong type, not acceptable.');
 
         return $response;
     }

@@ -7,23 +7,32 @@ use Phrases\Persistence;
 
 class Factory
 {
-    private $constructorArgs = null;
+    private $repository = null;
+    private $params;
 
-    public function __construct(Persistence\RepositoryInterface $phrases)
+    public function __construct(Persistence\RepositoryInterface $phrases, ...$additionalParam)
     {
-        $this->constructorArgs = $phrases;
+        $this->repository = $phrases;
+        $this->params     = $additionalParam;
     }
 
     public function forHttpMethod(Request $request)
     {
         if ($request->isGet()) {
-            return new GetPhrase($this->constructorArgs);
+            return call_user_func_array(
+                GetPhrase::class,
+                array_merge([$this->repository], $this->params)
+            );
         }
 
         if ($request->isPost()) {
-            return new PostPhrase(
-                $this->constructorArgs,
-                $request->getPost()->toArray()
+            return call_user_func_array(
+                PostPhrase::class,
+                array_merge(
+                    [$this->repository],
+                    $this->params,
+                    [$request->getPost()->toArray()]
+                )
             );
         }
 

@@ -15,62 +15,33 @@
  * This software consists of voluntary contributions made by many individuals
  * and is licensed under the MIT license.
  */
-namespace Phrases\Entity;
 
-use Cocur\Slugify\Slugify;
-use InvalidArgumentException;
+namespace Phrases\Command;
 
-class Phrase
+use Zend\Http\Response;
+
+class CommandBus
 {
     /**
-     * @var string
+     * @var CommandHandlerInterface[]
      */
-    protected $title;
+    private $pull;
 
     /**
-     * @var string
+     * @param CommandHandlerInterface[] $pullHandlers
      */
-    protected $text;
-
-    /**
-     * Constructor.
-     *
-     * @param string $title
-     * @param string $text
-     */
-    public function __construct($title, $text)
+    public function __construct(array $pullHandlers)
     {
-        $this->title = trim($title);
-        $this->text  = trim($text);
+        $this->pull = $pullHandlers;
+    }
 
-        if (empty($this->title) || empty($this->text)) {
-            throw new InvalidArgumentException(
-                'The "title" and "text" params cannot be null.'
-            );
+    public function handle($command, $repository)
+    {
+        foreach ($this->pull as $handler) {
+            /* @var CommandHandleInterface $handle */
+            if ($handler->canHandle($command)) {
+                return $handler->handle($command, $repository);
+            }
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSlug()
-    {
-        return (new Slugify())->slugify($this->title);
     }
 }

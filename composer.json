@@ -1,6 +1,7 @@
 {
     "require":  {
         "php": ">=5.5",
+        "rhumsaa/uuid": "2.8.*",
         "zendframework/zend-http": "2.0.*",
         "cocur/slugify": "~1.0"
     },

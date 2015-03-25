@@ -2,6 +2,7 @@
 
 namespace Phrases;
 
+use Phrases\Command\CommandBus;
 use Phrases\Http\Response\Type;
 use Phrases\Persistence\RepositoryInterface;
 use Zend\Stdlib\RequestInterface;
@@ -23,15 +24,22 @@ class Application
     private $request;
 
     /**
+     * @var CommandBus
+     */
+    private $commandBus;
+
+    /**
      * Constructor.
      *
      * @param RepositoryInterface      $phrases
+     * @param CommandBus               $commandBus
      * @param Request|RequestInterface $request {@see \Zend\Http\Request}
      */
-    public function __construct(RepositoryInterface $phrases, Request $request = null)
+    public function __construct(RepositoryInterface $phrases, CommandBus $commandBus, Request $request = null)
     {
-        $this->phrases = $phrases;
-        $this->request = is_null($request) ? new EnvRequest() : $request;
+        $this->phrases    = $phrases;
+        $this->commandBus = $commandBus;
+        $this->request    = null === $request ? new EnvRequest() : $request;
     }
 
     /**
@@ -43,7 +51,7 @@ class Application
     {
         $this->ensureAcceptHeaderExistsOnRequest($this->request);
         $controllerFactory = new Controller\Factory($this->phrases);
-        $controller = $controllerFactory->forHttpMethod($this->request);
+        $controller = $controllerFactory->forHttpMethod($this->request, $this->commandBus);
         $response = $controller->execute($this->request);
 
         return $this->serializeControllerResponse($this->request, $response);
@@ -76,9 +84,11 @@ class Application
     private function serializeControllerResponse(Request $request, Response $response)
     {
         $json = new Type\Json;
+        $html = new Type\Html;
         $text = new Type\PlainText;
         $notAcceptable = new Type\NotAcceptable;
-        $json->setSuccessor($text);
+        $json->setSuccessor($html);
+        $html->setSuccessor($text);
         $text->setSuccessor($notAcceptable);
 
         return $json->handlerResponse($request, $response);
