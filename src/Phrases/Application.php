@@ -76,9 +76,11 @@ class Application
     private function serializeControllerResponse(Request $request, Response $response)
     {
         $json = new Type\Json;
+        $html = new Type\Html;
         $text = new Type\PlainText;
         $notAcceptable = new Type\NotAcceptable;
-        $json->setSuccessor($text);
+        $json->setSuccessor($html);
+        $html->setSuccessor($text);
         $text->setSuccessor($notAcceptable);
 
         return $json->handlerResponse($request, $response);

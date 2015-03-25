@@ -87,11 +87,10 @@ abstract class AbstractResponse
         }
 
         if (! $this->canResolve($request)) {
-            $this->markRequestAsHandled();
-            return $this->serialize($response);
+            return $this->callSuccessor($request, $response);
         }
 
-        return $this->callSuccessor($request, $response);
+        return $this->serialize($response);
     }
 
     /**
