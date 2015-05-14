@@ -4,6 +4,7 @@ namespace Phrases\Controller;
 
 use Zend\Http\Request;
 use Phrases\Persistence;
+use Zend\Http\Response;
 
 class Factory
 {
@@ -27,6 +28,6 @@ class Factory
             );
         }
 
-        return new Error(405, 'Method not allowed');
+        return new Error(Response::STATUS_CODE_405, 'Method not allowed');
     }
 }
