@@ -10,11 +10,19 @@ class Factory
 {
     private $constructorArgs;
 
+    /**
+     * @param Persistence\RepositoryInterface $phrases
+     */
     public function __construct(Persistence\RepositoryInterface $phrases)
     {
         $this->constructorArgs = $phrases;
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return Error|GetPhrase|PostPhrase
+     */
     public function forHttpMethod(Request $request)
     {
         if ($request->isGet()) {
