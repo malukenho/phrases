@@ -1,4 +1,19 @@
 {
+    "name": "malukenho/phrases",
+    "authors":[
+        {
+            "name": "Augusto Pascutti",
+            "email": "augusto@phpsp.org.br"
+        },
+        {
+            "name": "Jack Makiyama",
+            "email": "jackmakiyama@gmail.com"
+        },
+        {
+            "name": "Jefersson Nathan",
+            "email": "malukenho@phpse.net"
+        }
+    ],
     "require":  {
         "php": ">=5.5",
         "zendframework/zend-http": "2.0.*",
