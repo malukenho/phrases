@@ -61,7 +61,7 @@ class Application
         if (false === $currentAccept) {
             $defaultAcceptHeaders = Headers::fromString('Accept: '.$defaultAccept);
             $defaultAcceptHeader = $defaultAcceptHeaders->get('Accept');
-            $request->getHeaders()->addHeaders($defaultAcceptHeaders);
+            $request->getHeaders()->addHeaders($defaultAcceptHeader);
         }
     }
 
