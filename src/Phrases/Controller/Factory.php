@@ -7,7 +7,7 @@ use Phrases\Persistence;
 
 class Factory
 {
-    private $constructorArgs = null;
+    private $constructorArgs;
 
     public function __construct(Persistence\RepositoryInterface $phrases)
     {
